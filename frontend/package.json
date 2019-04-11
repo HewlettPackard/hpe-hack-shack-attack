@@ -1,0 +1,22 @@
+{
+  "name": "discover-2019-game-frontend",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next build && next start"
+  },
+  "dependencies": {
+    "grommet": "^2.6.5",
+    "next": "^8.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "styled-components": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-react": "^7.12.4"
+  }
+}
