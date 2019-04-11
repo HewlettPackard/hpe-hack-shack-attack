@@ -1,0 +1,15 @@
+{
+  "name": "discover-2019-game",
+  "version": "1.0.0",
+  "description": "HPE Discover 2019 Game",
+  "main": "index.js",
+  "repository": "https://github.com/hpe-dev-incubator/discover-2019-game.git",
+  "scripts": {
+    "dev": "concurrently --names \"API,UI\" -c \"bgGreen.bold,bgMagenta.bold\" -k \"(cd server && yarn start)\" \"(cd frontend && yarn start)\""
+  },
+  "bugs": {
+    "url": "https://github.com/hpe-dev-incubator/discover-2019-game/issues"
+  },
+  "author": "Madhu Rebbana <madhu.rebbana@gmail.com>",
+  "license": "MIT"
+}
