@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import Spinner from '../components/Spinner'
 import { Config } from '../config'; // Usage: Config.apiUrl/user
 
 const Home = () => (
@@ -10,8 +9,8 @@ const Home = () => (
       <p className="description">
         To get started, edit <code>pages/index.js</code> and save to reload.
       </p>
-      <Link href="/game">
-            <a className="description"><p>Access Game Page</p></a>
+      <Link href="/leaderboard">
+            <a className="description"><p>Access Leaderboard</p></a>
         </Link>
     </div>
 

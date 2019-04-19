@@ -9,7 +9,8 @@ router.get('/user/leaderboard', (req,res) => {
 
 router.post('/user/create', (req, res) => {
   return User.create(req.body)
-    .then(user => res.send(user));
+    .then(user => res.send(user))
+    .catch(err => res.send(err));
 });
 
 export default router;
