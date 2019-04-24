@@ -6,7 +6,6 @@ var path = require('path');
 
 // Our modules
 import userRoutes from './routes/user';
-import leaderboardRoutes from './routes/leaderboard';
 
 const app = express();
 app.use(express.json());
@@ -23,7 +22,6 @@ app.get('/', (req,res) => {
 
 // Model routes
 app.use('/api', userRoutes);
-app.use('/api', leaderboardRoutes);
 
 let server = false;
 

@@ -6,6 +6,7 @@
     "start": "next build && next start"
   },
   "dependencies": {
+    "babel-eslint": "^10.0.1",
     "grommet": "^2.6.5",
     "next": "^8.0.4",
     "react": "^16.8.6",

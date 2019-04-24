@@ -1,17 +1,13 @@
-import React from 'react'
-import Link from 'next/link'
-import { Config } from '../config'; // Usage: Config.apiUrl/user
+import React from 'react';
+import Link from 'next/link';
 
 const Home = () => (
   <div>
     <div className="hero">
       <h1 className="title">Welcome to HPE Discover 2019 Hackshack</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
       <Link href="/leaderboard">
-            <a className="description"><p>Access Leaderboard</p></a>
-        </Link>
+        <a className="description"><p>Access Leaderboard</p></a>
+      </Link>
     </div>
 
     <style jsx>{`
@@ -30,8 +26,9 @@ const Home = () => (
       .description {
         text-align: center;
       }
-    `}</style>
+    `}
+    </style>
   </div>
-)
+);
 
-export default Home
+export default Home;
