@@ -182,7 +182,6 @@ export default class HighScoreScene extends Phaser.Scene {
   }
   submitUserData (initials, name, score) {
     const data = { initials, name, score };
-    console.log('DATA', data);
       return fetch('http://localhost:3002/api/user/create', {
         method: 'POST',
         body: JSON.stringify(data),
