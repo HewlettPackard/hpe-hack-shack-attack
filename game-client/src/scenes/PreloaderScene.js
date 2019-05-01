@@ -1,5 +1,5 @@
 import 'phaser';
-
+// placeholder assets
 import blockImg from '../assets/input/block.png';
 import rubImg from '../assets/input/rub.png';
 import endImg from '../assets/input/end.png';
@@ -7,6 +7,22 @@ import pixelImg from '../assets/sprites/16x16.png'
 import ghostImg from '../assets/sprites/ghost.png'
 import arcadeFontImg from '../assets/fonts/arcade.png'
 import arcadeFontXml from '../assets/fonts/arcade.xml'
+// tiles
+import floorTile1 from '../assets/tiles/floor-tile-1.png';
+import floorTile2 from '../assets/tiles/floor-tile-2.png';
+import floorTile3 from '../assets/tiles/floor-tile-3.png';
+import floorTile4 from '../assets/tiles/floor-tile-4.png';
+// sprites
+// logos
+import gameLogo from '../assets/sprites/attack-marquee.png';
+import hpeDevLogo from '../assets/sprites/hpe-dev-logo.png';
+import hpeLogo from '../assets/sprites/dev-powerup.png';
+// game
+import playerAvatar from '../assets/sprites/player1-avatar.png';
+import player from '../assets/sprites/player1-dev.png';
+import bullet from '../assets/sprites/bullets-pellets.png';
+import itBug from '../assets/sprites/it-bug.png';
+import itMonster from '../assets/sprites/it-monster.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -80,6 +96,7 @@ export default class PreloaderScene extends Phaser.Scene {
     });
     // timed event for logo
     this.timedEvent = this.time.delayedCall(1, this.ready, [], this);
+    // placeholder sprites
     // input panel
     this.load.image('block', blockImg);
     this.load.image('rub', rubImg);
@@ -89,6 +106,22 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('ghost', ghostImg);
     // font
     this.load.bitmapFont('arcadeFont', arcadeFontImg, arcadeFontXml);
+
+    //sprites
+    this.load.image('floorTile1', floorTile1);
+    this.load.image('floorTile2', floorTile2);
+    this.load.image('floorTile3', floorTile3);
+    this.load.image('floorTile4', floorTile4);
+    
+    this.load.image('gameLogo', gameLogo);
+    this.load.image('hpeDevLogo', hpeDevLogo);
+    this.load.image('hpeLogo', hpeLogo);
+
+    this.load.image('playerAvatar', playerAvatar);
+    this.load.image('player', player);
+    this.load.image('bullet', bullet);
+    this.load.image('itBug', itBug);
+    this.load.image('itMonster', itMonster);
   }
   ready() {
     this.readyCount++;
