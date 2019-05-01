@@ -15,8 +15,10 @@ export default class TitleScene extends Phaser.Scene {
     // logo
     this.gameLogo = this.add.sprite(0, 0, 'gameLogo')
       .setScale(0.8)
-    this.centerObject(this.gameLogo, 0, 1.5);
-
+    this.centerObject(this.gameLogo, 0, 1.2);
+    this.hpeDevLogo = this.add.sprite(0, 0, 'hpeDevLogo')
+      .setScale(0.5)
+    this.centerObject(this.hpeDevLogo, -4, 3);
     // start select box
     this.startSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)

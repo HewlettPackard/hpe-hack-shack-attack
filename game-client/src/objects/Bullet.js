@@ -2,7 +2,7 @@ import 'phaser';
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, 'pixel');
+    super(scene, x, y, 'bullet');
 
     this.scene = scene;
 
@@ -20,19 +20,19 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     switch (direction) {
       case 'up':
-        this.setPosition(x, y);
+        this.setPosition(x + 10, y);
         this.setVelocityY(-350);
         break;
       case 'down':
-        this.setPosition(x, y);
+        this.setPosition(x - 10, y);
         this.setVelocityY(350);
         break;
       case 'left':
-        this.setPosition(x, y);
+        this.setPosition(x, y - 10);
         this.setVelocityX(-350);
         break;
       case 'right':
-        this.setPosition(x, y);
+        this.setPosition(x, y + 10);
         this.setVelocityX(350);
         break;
     }

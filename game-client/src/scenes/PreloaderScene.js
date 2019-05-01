@@ -12,6 +12,7 @@ import floorTile1 from '../assets/tiles/floor-tile-1.png';
 import floorTile2 from '../assets/tiles/floor-tile-2.png';
 import floorTile3 from '../assets/tiles/floor-tile-3.png';
 import floorTile4 from '../assets/tiles/floor-tile-4.png';
+import map from '../assets/sprites/playfield.png';
 // sprites
 // logos
 import gameLogo from '../assets/sprites/attack-marquee.png';
@@ -112,6 +113,7 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('floorTile2', floorTile2);
     this.load.image('floorTile3', floorTile3);
     this.load.image('floorTile4', floorTile4);
+    this.load.image('map', map);
     
     this.load.image('gameLogo', gameLogo);
     this.load.image('hpeDevLogo', hpeDevLogo);
@@ -126,7 +128,7 @@ export default class PreloaderScene extends Phaser.Scene {
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('Title');
+      this.scene.start('Game');
     }
   }
 }

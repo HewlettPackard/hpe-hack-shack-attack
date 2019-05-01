@@ -1,5 +1,6 @@
 import 'phaser';
-import Enemy from '../objects/Enemy';
+import ItBug from '../objects/ItBug';
+import ItMonster from '../objects/ItMonster';
 import Player from '../objects/Player';
 import Bullet from '../objects/Bullet';
 
@@ -8,10 +9,11 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
   init() {
-    this.spawnTimer = 0;
+    this.spawnTimerBug = 0;
+    this.spawnTimerMonster = 0;
     this.bulletTimer = 0;
     this.collisionDamage = 1
-    this.spawnSide = ['top', 'left', 'right', 'bottom'];
+    this.spawnSide = ['left', 'right', 'bottom'];
 
     this.height = this.game.config.height;
     this.width = this.game.config.width;
@@ -20,6 +22,7 @@ export default class GameScene extends Phaser.Scene {
     this.startRound = false;
   }
   create() {
+    this.add.sprite(this.width / 2, this.height / 2, 'map');
     this.fireKeys = this.input.keyboard.createCursorKeys();
     this.moveKeys = this.input.keyboard.addKeys({
       'up': Phaser.Input.Keyboard.KeyCodes.W,
@@ -35,7 +38,9 @@ export default class GameScene extends Phaser.Scene {
     this.createPlayer();
     this.addCollisions();
     this.setupEvents();
-    this.physics.world.setBounds(0, 0, 1336, 768);
+    this.physics.world.setBounds(0, 100, 1336, 768);
+    this.playerAvatar = this.add.sprite(1115, 32, 'playerAvatar')
+      .setScale(0.5);
     this.scoreText = this.add.bitmapText(20, 20, 'arcadeFont', 'Score:0', 25).setTint(0xFFFFFF);
     this.livesText = this.add.bitmapText(1140, 20, 'arcadeFont', `Lives:${this.player.lives}`, 25).setTint(0xFFFFFF);
   }
@@ -51,31 +56,40 @@ export default class GameScene extends Phaser.Scene {
     })
   }
   createGroups() {
-    this.enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
+    this.itBugs = this.physics.add.group({ classType: ItBug, runChildUpdate: true });
+    this.itMonsters = this.physics.add.group({ classType: ItMonster, runChildUpdate: true });
     this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
   }
   addCollisions() {
-    this.physics.add.collider(this.enemies, this.enemies);
-    this.physics.add.overlap(this.player, this.enemies, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
-    this.physics.add.overlap(this.enemies, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
+    this.physics.add.collider(this.itBugs, this.itBugs);
+    this.physics.add.overlap(this.player, this.itBugs, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkitBugCollision, this);
+    this.physics.add.overlap(this.itBugs, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
   }
   createPlayer() {
     this.player = new Player(this, this.width / 2 - 5, this.height / 2);
     this.player.setCollideWorldBounds(true)
-      .setSize(16, 16);
+      .setSize(70, 95, true);
   }
   update(time) {
     if (this.startRound) {
       this.player.update(this.moveKeys, this.fireKeys);
       this.fireBullets(time);
-      this.spawnEnemies(time);
+      this.spawnitBug(time);
+      this.spawnitMonster(time);
+
       Phaser.Utils.Array.Each(
-        this.enemies.getChildren(),
+        this.itBugs.getChildren(),
+        this.physics.moveToObject,
+        this.physics,
+        this.player, 150);
+
+      Phaser.Utils.Array.Each(
+        this.itMonsters.getChildren(),
         this.physics.moveToObject,
         this.physics,
         this.player, 150);
     } else {
-      this.spawnTimer = time;
+      this.spawnTimerBug = time;
       this.bulletTimer = time;
     }
   }
@@ -111,40 +125,54 @@ export default class GameScene extends Phaser.Scene {
       }
     }
   }
-  spawnEnemies(time) {
-    if (time > this.spawnTimer) {
-      let enemy = this.enemies.getFirstDead(false);
-      if (!enemy) {
-        enemy = new Enemy(this, 0, 0);
-        this.enemies.add(enemy);
+  spawnitBug(time) {
+    if (time > this.spawnTimerBug) {
+      let itBug = this.itBugs.getFirstDead(false);
+      if (!itBug) {
+        itBug = new ItBug(this, 0, 0);
+        this.itBugs.add(itBug);
       }
-      if (enemy) {
+      if (itBug) {
         let coords = this.getSpawnPos();
-        enemy.setActive(true)
+        itBug.setActive(true)
           .setVisible(true)
-          .setScale(0.35)
+          .setScale(0.6)
+          .setCircle(34, 15, 18)
           .spawn(coords.x, coords.y);
         let newTime = Phaser.Math.Between(500, 1500);
-        this.spawnTimer = time + newTime;
+        this.spawnTimerBug = time + newTime;
+      }
+    }
+  }
+  spawnitMonster(time) {
+    if (time > this.spawnTimerMonster) {
+      let itMonster = this.itMonsters.getFirstDead(false);
+      if (!itMonster) {
+        itMonster = new ItMonster(this, 0, 0);
+        this.itMonsters.add(itMonster);
+      }
+      if (itMonster) {
+        itMonster.setActive(true)
+          .setVisible(true)
+          .setScale(0.6)
+          .spawn(this.width / 2, 0);
+        let newTime = Phaser.Math.Between(500, 1500);
+        this.spawnTimerMonster = time + newTime;
       }
     }
   }
   getSpawnPos() {
-    let index = Math.floor(Math.random() * 4);
+    let index = Math.floor(Math.random() * 3);
     let x;
     let y;
     switch(this.spawnSide[index]){
-      case('top'):
-        x = Phaser.Math.Between(0, this.width);
-        y = Phaser.Math.Between(-15, -45);
-        return { x, y };
       case('left'):
         x = Phaser.Math.Between(-15, -45);
-        y = Phaser.Math.Between(0, this.height);
+        y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('right'):
         x = Phaser.Math.Between(this.width + 15, this.width + 45);
-        y = Phaser.Math.Between(0, this.height);
+        y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('bottom'):
         x = Phaser.Math.Between(0, this.width);
@@ -152,14 +180,14 @@ export default class GameScene extends Phaser.Scene {
         return { x, y };
     }
   }
-  checkBulletCollision(bullet, enemy) {
-    return (bullet.active && enemy.active);
+  checkBulletCollision(bullet, itBug) {
+    return (bullet.active && itBug.active);
   }
-  checkEnemyCollision(player, enemy) {
-    return (player.active && enemy.active);
+  checkitBugCollision(player, itBug) {
+    return (player.active && itBug.active);
   }
-  bulletCollision(enemy, bullet) {
-    enemy.onHit(1);
+  bulletCollision(itBug, bullet) {
+    itBug.onHit(1);
     bullet.onHit();
   }
 }
