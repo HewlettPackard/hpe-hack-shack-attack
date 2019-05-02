@@ -36,40 +36,9 @@ export default class GameScene extends Phaser.Scene {
     .setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
 
-    this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -180)
-    this.physics.add.existing(this.doorLeft);
-    this.doorLeft.body
-      .setSize(10, 600)
-      .setImmovable(true);
-
-    this.doorRight = this.physics.add.sprite(this.width / 2 + 60 , -180)
-    this.physics.add.existing(this.doorRight);
-    this.doorRight.body
-      .setSize(10, 600)
-      .setImmovable(true);
-
-    this.physics.add.existing(this.doorRight);
-    this.doorRight.body
-      .setSize(10, 600)
-      .setImmovable(true);
-
-    this.borderDark = this.add.graphics()
-      .fillStyle(0x000000, 1)
-      .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
-      .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
-      .fillRect(this.width / 2 - 82, 0, 150, 50)
-      .fillRect(0, this.height - 50, this.width, 50)
-      .setDepth(2);
-
-    this.borderLight = this.add.graphics()
-      .fillStyle(0x000000, 0.5)
-      .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
-      .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
-      .fillRect(this.width / 2 - 82, 0, 150, 75)
-      .fillRect(0, this.height - 75, this.width, 75)
-      .setDepth(1);
 
     this.countdown();
+    this.createWallsandBorders();
     this.createGroups();
     this.createPlayer();
     this.addCollisions();
@@ -97,6 +66,35 @@ export default class GameScene extends Phaser.Scene {
       this.scoreText.setText(`Score:${this.score}`);
     })
   }
+  createWallsandBorders() {
+    this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -180)
+    this.physics.add.existing(this.doorLeft);
+    this.doorLeft.body
+      .setSize(10, 600)
+      .setImmovable(true);
+
+    this.doorRight = this.physics.add.sprite(this.width / 2 + 60 , -180)
+    this.physics.add.existing(this.doorRight);
+    this.doorRight.body
+      .setSize(10, 600)
+      .setImmovable(true);
+
+    this.borderDark = this.add.graphics()
+      .fillStyle(0x000000, 1)
+      .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
+      .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
+      .fillRect(this.width / 2 - 82, 0, 150, 50)
+      .fillRect(0, this.height - 50, this.width, 50)
+      .setDepth(2);
+
+    this.borderLight = this.add.graphics()
+      .fillStyle(0x000000, 0.5)
+      .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
+      .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
+      .fillRect(this.width / 2 - 82, 0, 150, 75)
+      .fillRect(0, this.height - 75, this.width, 75)
+      .setDepth(1);
+  }
   createGroups() {
     this.itBugs = this.physics.add.group({ classType: ItBug, runChildUpdate: true });
     this.itMonsters = this.physics.add.group({ classType: ItMonster, runChildUpdate: true });
@@ -110,8 +108,11 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.itMonsters, this.doorLeft);
     this.physics.add.collider(this.itMonsters, this.doorRight);
 
-    this.physics.add.overlap(this.player, this.itBugs, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkitBugCollision, this);
+    this.physics.add.overlap(this.player, this.itBugs, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
     this.physics.add.overlap(this.itBugs, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
+
+    this.physics.add.overlap(this.player, this.itMonsters, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
+    this.physics.add.overlap(this.itMonsters, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
   }
   createPlayer() {
     this.player = new Player(this, this.width / 2 - 5, this.height / 2);
@@ -121,7 +122,7 @@ export default class GameScene extends Phaser.Scene {
   update(time) {
     if (this.startRound) {
       this.player.update(this.moveKeys, this.fireKeys);
-      this.fireBullets(time);
+      this.fireBullets(time, this.fireKeys);
       this.spawnitBug(time);
       this.spawnitMonster(time);
 
@@ -160,17 +161,21 @@ export default class GameScene extends Phaser.Scene {
       });
     }
   }
-  fireBullets(time) {
+  fireBullets(time, key) {
     if (time > this.bulletTimer) {
-      let bullet = this.bullets.getFirstDead(false);
-      if (!bullet) {
-        bullet = new Bullet(this, 0, 0);
-        this.bullets.add(bullet);
-      }
-      if (bullet) {
-        bullet.onFire(this.player.x, this.player.y, this.fireKeys);
+      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown) {
+        let bullet = this.bullets.getFirstDead(false);
+        if (!bullet) {
+          bullet = new Bullet(this, 0, 0);
+          this.bullets.add(bullet);
+        }
+        if (bullet) {
+          bullet.onFire(this.player.x, this.player.y, key);
+          this.bulletTimer += 150;
+        }
+      } else {
         this.bulletTimer += 250;
-      }
+      }     
     }
   }
   spawnitBug(time) {
@@ -228,14 +233,14 @@ export default class GameScene extends Phaser.Scene {
         return { x, y };
     }
   }
-  checkBulletCollision(bullet, itBug) {
-    return (bullet.active && itBug.active);
+  checkBulletCollision(bullet, enemy) {
+    return (bullet.active && enemy.active);
   }
-  checkitBugCollision(player, itBug) {
-    return (player.active && itBug.active);
+  checkEnemyCollision(player, enemy) {
+    return (player.active && enemy.active);
   }
-  bulletCollision(itBug, bullet) {
-    itBug.onHit(1);
+  bulletCollision(enemy, bullet) {
+    enemy.onHit(1);
     bullet.onHit();
   }
 }
