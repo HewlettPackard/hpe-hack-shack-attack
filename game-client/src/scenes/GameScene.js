@@ -96,9 +96,9 @@ export default class GameScene extends Phaser.Scene {
       .setDepth(1);
   }
   createGroups() {
-    this.itBugs = this.physics.add.group({ classType: ItBug, runChildUpdate: true });
-    this.itMonsters = this.physics.add.group({ classType: ItMonster, runChildUpdate: true });
-    this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
+    this.itBugs = this.physics.add.group({ classType: ItBug });
+    this.itMonsters = this.physics.add.group({ classType: ItMonster });
+    this.bullets = this.physics.add.group({ classType: Bullet });
   }
   addCollisions() {
     this.physics.add.collider(this.itBugs, this.itBugs);
@@ -124,7 +124,7 @@ export default class GameScene extends Phaser.Scene {
       this.player.update(this.moveKeys, this.fireKeys);
       this.fireBullets(time, this.fireKeys);
       this.spawnitBug(time);
-      this.spawnitMonster(time);
+     // this.spawnitMonster(time);
 
       Phaser.Utils.Array.Each(
         this.itBugs.getChildren(),
@@ -132,11 +132,11 @@ export default class GameScene extends Phaser.Scene {
         this.physics,
         this.player, 150);
 
-      Phaser.Utils.Array.Each(
+/*       Phaser.Utils.Array.Each(
         this.itMonsters.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 150);
+        this.player, 150); */
     } else {
       this.spawnTimerBug = time;
       this.bulletTimer = time;
@@ -171,7 +171,7 @@ export default class GameScene extends Phaser.Scene {
         }
         if (bullet) {
           bullet.onFire(this.player.x, this.player.y, key);
-          this.bulletTimer += 150;
+          this.bulletTimer += 250;
         }
       } else {
         this.bulletTimer += 250;
@@ -207,9 +207,9 @@ export default class GameScene extends Phaser.Scene {
       if (itMonster) {
         itMonster.setActive(true)
           .setVisible(true)
-          .setScale(0.6)
+          .setSize(90, 90)
           .spawn(this.width / 2, 0);
-        let newTime = Phaser.Math.Between(1500, 3000);
+        let newTime = Phaser.Math.Between(5000, 10000);
         this.spawnTimerMonster = time + newTime;
       }
     }

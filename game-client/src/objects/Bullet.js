@@ -9,10 +9,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
   }
-  update(time, delta) {
-
-  }
-
   fireBullet(x, y, direction) {
     this.enableBody(true);
     this.setActive(true);
@@ -36,15 +32,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.setVelocityX(350);
         break;
     }
-    this.scene.time.addEvent({
-      delay: 2000,
-      callback: () => {
-        this.disableBody();
-        this.setActive(false);
-        this.setVisible(false);
-        this.setVelocity(0);
-      }
-    });
   }
 
   onFire(x, y, fireKeys) {
