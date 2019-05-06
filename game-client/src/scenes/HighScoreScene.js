@@ -166,16 +166,14 @@ export default class HighScoreScene extends Phaser.Scene {
     let y = this.cursor.y;
     let initialLength = this.initials.length;
     let nameLength = this.name.length;
-    console.log(x, y);
-    console.log(initialLength);
-    console.log(nameLength);
+
     if (x === 9 && y === 2 && initialLength > 0 && nameLength > 0) {
       this.events.emit('submitUserData', this.initials, this.name, this.score);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength === 0 && initialLength !== 0) {
       this.initials = this.initials.substr(0, initialLength - 1);
       this.events.emit('updateInitials', this.initials);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength > 0) {
-      console.log('delete name');
+
       this.name = this.name.substr(0, nameLength - 1);
       this.events.emit('updateName', this.name);
     } else if (initialLength < this.initLimit) {
