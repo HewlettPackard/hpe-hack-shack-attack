@@ -1,4 +1,4 @@
-export const Config = {
+export const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
   width: 1336,
@@ -7,7 +7,7 @@ export const Config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true,
+      debug: false,
       gravity: { y: 0 }
     }
   }
