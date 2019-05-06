@@ -98,7 +98,7 @@ export default class GameScene extends Phaser.Scene {
   createGroups() {
     this.itBugs = this.physics.add.group({ classType: ItBug });
     this.itMonsters = this.physics.add.group({ classType: ItMonster });
-    this.bullets = this.physics.add.group({ classType: Bullet });
+    this.bullets = this.physics.add.group({ classType: Bullet , runChildUpdate: true });
   }
   addCollisions() {
     this.physics.add.collider(this.itBugs, this.itBugs);
@@ -124,7 +124,7 @@ export default class GameScene extends Phaser.Scene {
       this.player.update(this.moveKeys, this.fireKeys);
       this.fireBullets(time, this.fireKeys);
       this.spawnitBug(time);
-     // this.spawnitMonster(time);
+      this.spawnitMonster(time);
 
       Phaser.Utils.Array.Each(
         this.itBugs.getChildren(),
@@ -132,11 +132,12 @@ export default class GameScene extends Phaser.Scene {
         this.physics,
         this.player, 150);
 
-/*       Phaser.Utils.Array.Each(
+      Phaser.Utils.Array.Each(
         this.itMonsters.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 150); */
+        this.player, 150);
+        
     } else {
       this.spawnTimerBug = time;
       this.bulletTimer = time;

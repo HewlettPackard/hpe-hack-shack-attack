@@ -1,4 +1,4 @@
-export default {
+export const Config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
   width: 1336,
@@ -12,3 +12,5 @@ export default {
     }
   }
 };
+
+export const API_URL="http://localhost:3002/api/user/create";

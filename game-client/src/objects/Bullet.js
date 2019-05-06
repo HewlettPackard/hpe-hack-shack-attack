@@ -5,9 +5,19 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'bullet');
 
     this.scene = scene;
+    this.gameWidth = this.scene.game.config.width;
+    this.gameHeight = this.scene.game.config.height;
 
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
+  }
+  update() {
+    if (this.x > this.gameWidth + 100 || this.x < -100) {
+      this.onHit();
+    } 
+    if (this.y > this.gameHeight + 100 || this.y < -100) {
+      this.onHit()
+    }
   }
   fireBullet(x, y, direction) {
     this.enableBody(true);
