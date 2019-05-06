@@ -42,6 +42,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.name = '';
     this.events.removeListener('updateInitials');
     this.events.removeListener('updateName');
+    this.events.removeListener('submitUserData');
   }
   createHighScoreMenu() {
     this.text = this.add.bitmapText(this.width / 2 - 250, this.height / 2 - 180, 'arcadeFont', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-', 55)
@@ -73,6 +74,7 @@ export default class HighScoreScene extends Phaser.Scene {
   addEventListeners() {
     this.events.on('updateInitials', this.updateInitials, this);
     this.events.on('updateName', this.updateName, this);
+    this.events.on('submitUserData', this.submitUserData, this);
   }
   addInputs() {
     this.leftInput = this.input.keyboard.on('keyup_LEFT', this.moveLeft, this);
@@ -164,7 +166,9 @@ export default class HighScoreScene extends Phaser.Scene {
     let y = this.cursor.y;
     let initialLength = this.initials.length;
     let nameLength = this.name.length;
-
+    console.log(x, y);
+    console.log(initialLength);
+    console.log(nameLength);
     if (x === 9 && y === 2 && initialLength > 0 && nameLength > 0) {
       this.events.emit('submitUserData', this.initials, this.name, this.score);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength === 0 && initialLength !== 0) {
