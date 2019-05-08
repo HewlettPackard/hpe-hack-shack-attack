@@ -2,13 +2,13 @@ import 'phaser';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, 'pixel');
+    super(scene, x, y, 'player');
 
     this.scene = scene;
     this.lives = 3;
     this.immune = false;
 
-    this.setScale(2);
+    this.setScale(0.5);
 
     this.playerFlicker = this.scene.tweens.add({
       targets: this,
@@ -41,7 +41,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.immune === false) {
       this.lives -= damage;
       livesText.setText(`Lives:${this.lives}`);
-      this.scene.cameras.main.shake(300);
+      this.scene.cameras.main.shake(200);
       this.immune = true;
   
       this.scene.time.addEvent({

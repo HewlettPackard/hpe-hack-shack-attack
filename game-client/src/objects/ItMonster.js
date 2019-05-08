@@ -1,8 +1,8 @@
 import 'phaser';
 
-export default class Enemy extends Phaser.Physics.Arcade.Sprite {
+export default class ItMonster extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, 'ghost');
+    super(scene, x, y, 'itMonster');
 
     this.scene = scene;
     this.hp = 0;
@@ -11,7 +11,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
   }
   spawn(x, y) {
-    this.hp = 2;
+    this.hp = 3;
     this.setPosition(x, y);
   }
 

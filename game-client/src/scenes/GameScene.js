@@ -1,5 +1,6 @@
 import 'phaser';
-import Enemy from '../objects/Enemy';
+import ItBug from '../objects/ItBug';
+import ItMonster from '../objects/ItMonster';
 import Player from '../objects/Player';
 import Bullet from '../objects/Bullet';
 
@@ -8,10 +9,11 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
   init() {
-    this.spawnTimer = 0;
+    this.spawnTimerBug = 0;
+    this.spawnTimerMonster = 0;
     this.bulletTimer = 0;
     this.collisionDamage = 1
-    this.spawnSide = ['top', 'left', 'right', 'bottom'];
+    this.spawnSide = ['left', 'right', 'bottom'];
 
     this.height = this.game.config.height;
     this.width = this.game.config.width;
@@ -20,6 +22,8 @@ export default class GameScene extends Phaser.Scene {
     this.startRound = false;
   }
   create() {
+    this.map = this.add.sprite(this.width / 2, this.height / 2, 'map');
+
     this.fireKeys = this.input.keyboard.createCursorKeys();
     this.moveKeys = this.input.keyboard.addKeys({
       'up': Phaser.Input.Keyboard.KeyCodes.W,
@@ -27,17 +31,29 @@ export default class GameScene extends Phaser.Scene {
       'left': Phaser.Input.Keyboard.KeyCodes.A,
       'right': Phaser.Input.Keyboard.KeyCodes.D
     });
+
     this.startText = this.add.bitmapText(this.width / 2, this.height / 2 - 200, 'arcadeFont', '', 75)
-      .setTint(0xFFFFFF)
-      .setOrigin(0.5, 0.5);
+    .setTint(0xFFFFFF)
+    .setOrigin(0.5, 0.5);
+
+
     this.countdown();
+    this.createWallsandBorders();
     this.createGroups();
     this.createPlayer();
     this.addCollisions();
     this.setupEvents();
-    this.physics.world.setBounds(0, 0, 1336, 768);
-    this.scoreText = this.add.bitmapText(20, 20, 'arcadeFont', 'Score:0', 25).setTint(0xFFFFFF);
-    this.livesText = this.add.bitmapText(1140, 20, 'arcadeFont', `Lives:${this.player.lives}`, 25).setTint(0xFFFFFF);
+    this.physics.world.setBounds(0, 120, this.width, this.height - 100);
+    this.playerAvatar = this.add.sprite(1115, 32, 'playerAvatar')
+      .setScale(0.5)
+      .setDepth(1);
+    this.scoreText = this.add.bitmapText(20, 20, 'arcadeFont', 'Score:0', 25)
+      .setTint(0xFFFFFF)
+      .setDepth(1);
+    this.livesText = this.add.bitmapText(1140, 20, 'arcadeFont', `Lives:${this.player.lives}`, 25)
+      .setTint(0xFFFFFF)
+      .setDepth(1);
+
   }
   setupEvents() {
     this.events.on('gameover', () => {
@@ -50,32 +66,80 @@ export default class GameScene extends Phaser.Scene {
       this.scoreText.setText(`Score:${this.score}`);
     })
   }
+  createWallsandBorders() {
+    this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -180)
+    this.physics.add.existing(this.doorLeft);
+    this.doorLeft.body
+      .setSize(10, 600)
+      .setImmovable(true);
+
+    this.doorRight = this.physics.add.sprite(this.width / 2 + 60 , -180)
+    this.physics.add.existing(this.doorRight);
+    this.doorRight.body
+      .setSize(10, 600)
+      .setImmovable(true);
+
+    this.borderDark = this.add.graphics()
+      .fillStyle(0x000000, 1)
+      .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
+      .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
+      .fillRect(this.width / 2 - 82, 0, 150, 50)
+      .fillRect(0, this.height - 50, this.width, 50)
+      .setDepth(2);
+
+    this.borderLight = this.add.graphics()
+      .fillStyle(0x000000, 0.5)
+      .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
+      .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
+      .fillRect(this.width / 2 - 82, 0, 150, 75)
+      .fillRect(0, this.height - 75, this.width, 75)
+      .setDepth(1);
+  }
   createGroups() {
-    this.enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
-    this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
+    this.itBugs = this.physics.add.group({ classType: ItBug });
+    this.itMonsters = this.physics.add.group({ classType: ItMonster });
+    this.bullets = this.physics.add.group({ classType: Bullet , runChildUpdate: true });
   }
   addCollisions() {
-    this.physics.add.collider(this.enemies, this.enemies);
-    this.physics.add.overlap(this.player, this.enemies, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
-    this.physics.add.overlap(this.enemies, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
+    this.physics.add.collider(this.itBugs, this.itBugs);
+    this.physics.add.collider(this.itMonsters, this.itMonsters);
+    this.physics.add.collider(this.itMonsters, this.itBugs);
+
+    this.physics.add.collider(this.itMonsters, this.doorLeft);
+    this.physics.add.collider(this.itMonsters, this.doorRight);
+
+    this.physics.add.overlap(this.player, this.itBugs, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
+    this.physics.add.overlap(this.itBugs, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
+
+    this.physics.add.overlap(this.player, this.itMonsters, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
+    this.physics.add.overlap(this.itMonsters, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
   }
   createPlayer() {
     this.player = new Player(this, this.width / 2 - 5, this.height / 2);
     this.player.setCollideWorldBounds(true)
-      .setSize(16, 16);
+      .setSize(70, 95, true);
   }
   update(time) {
     if (this.startRound) {
       this.player.update(this.moveKeys, this.fireKeys);
-      this.fireBullets(time);
-      this.spawnEnemies(time);
+      this.fireBullets(time, this.fireKeys);
+      this.spawnitBug(time);
+      this.spawnitMonster(time);
+
       Phaser.Utils.Array.Each(
-        this.enemies.getChildren(),
+        this.itBugs.getChildren(),
         this.physics.moveToObject,
         this.physics,
         this.player, 150);
+
+      Phaser.Utils.Array.Each(
+        this.itMonsters.getChildren(),
+        this.physics.moveToObject,
+        this.physics,
+        this.player, 150);
+        
     } else {
-      this.spawnTimer = time;
+      this.spawnTimerBug = time;
       this.bulletTimer = time;
     }
   }
@@ -98,53 +162,71 @@ export default class GameScene extends Phaser.Scene {
       });
     }
   }
-  fireBullets(time) {
+  fireBullets(time, key) {
     if (time > this.bulletTimer) {
-      let bullet = this.bullets.getFirstDead(false);
-      if (!bullet) {
-        bullet = new Bullet(this, 0, 0);
-        this.bullets.add(bullet);
-      }
-      if (bullet) {
-        bullet.onFire(this.player.x, this.player.y, this.fireKeys);
+      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown) {
+        let bullet = this.bullets.getFirstDead(false);
+        if (!bullet) {
+          bullet = new Bullet(this, 0, 0);
+          this.bullets.add(bullet);
+        }
+        if (bullet) {
+          bullet.onFire(this.player.x, this.player.y, key);
+          this.bulletTimer += 250;
+        }
+      } else {
         this.bulletTimer += 250;
+      }     
+    }
+  }
+  spawnitBug(time) {
+    if (time > this.spawnTimerBug) {
+      let itBug = this.itBugs.getFirstDead(false);
+      if (!itBug) {
+        itBug = new ItBug(this, 0, 0);
+        this.itBugs.add(itBug);
+      }
+      if (itBug) {
+        let coords = this.getSpawnPos();
+        itBug.setActive(true)
+          .setVisible(true)
+          .setScale(0.6)
+          .setCircle(34, 15, 18)
+          .spawn(coords.x, coords.y);
+        let newTime = Phaser.Math.Between(500, 1500);
+        this.spawnTimerBug = time + newTime;
       }
     }
   }
-  spawnEnemies(time) {
-    if (time > this.spawnTimer) {
-      let enemy = this.enemies.getFirstDead(false);
-      if (!enemy) {
-        enemy = new Enemy(this, 0, 0);
-        this.enemies.add(enemy);
+  spawnitMonster(time) {
+    if (time > this.spawnTimerMonster) {
+      let itMonster = this.itMonsters.getFirstDead(false);
+      if (!itMonster) {
+        itMonster = new ItMonster(this, 0, 0);
+        this.itMonsters.add(itMonster);
       }
-      if (enemy) {
-        let coords = this.getSpawnPos();
-        enemy.setActive(true)
+      if (itMonster) {
+        itMonster.setActive(true)
           .setVisible(true)
-          .setScale(0.35)
-          .spawn(coords.x, coords.y);
-        let newTime = Phaser.Math.Between(500, 1500);
-        this.spawnTimer = time + newTime;
+          .setSize(90, 90)
+          .spawn(this.width / 2, 0);
+        let newTime = Phaser.Math.Between(5000, 10000);
+        this.spawnTimerMonster = time + newTime;
       }
     }
   }
   getSpawnPos() {
-    let index = Math.floor(Math.random() * 4);
+    let index = Math.floor(Math.random() * 3);
     let x;
     let y;
     switch(this.spawnSide[index]){
-      case('top'):
-        x = Phaser.Math.Between(0, this.width);
-        y = Phaser.Math.Between(-15, -45);
-        return { x, y };
       case('left'):
         x = Phaser.Math.Between(-15, -45);
-        y = Phaser.Math.Between(0, this.height);
+        y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('right'):
         x = Phaser.Math.Between(this.width + 15, this.width + 45);
-        y = Phaser.Math.Between(0, this.height);
+        y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('bottom'):
         x = Phaser.Math.Between(0, this.width);

@@ -12,28 +12,29 @@ export default class TitleScene extends Phaser.Scene {
     this.input.keyboard.on('keyup_UP', this.onChange, this);
     this.input.keyboard.on('keyup_DOWN', this.onChange, this);
     this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
-    // logo text
-    this.hpeDevImg = this.add.bitmapText(980, 150, 'arcadeFont', 'HPE DEV', 30).setTint(0xFF875FD8);
-
-    this.hackShackImgShadow = this.add.bitmapText(220, 150, 'arcadeFont', 'HACK SHACK', 50).setTint(0xFF333333);
-    this.hackShackImg = this.add.bitmapText(215, 145, 'arcadeFont', 'HACK SHACK', 50).setTint(0xFF1FDC83);
-
-    this.attackImgShadow  = this.add.bitmapText(160, 200, 'arcadeFont', 'ATTACK!', 155).setTint(0xFFDE9B29);
-    this.attackImg = this.add.bitmapText(155, 195, 'arcadeFont', 'ATTACK!', 155).setTint(0xFFFF4D1C);
-
+    // logo
+    this.gameLogo = this.add.sprite(0, 0, 'gameLogo')
+      .setScale(0.8)
+    this.centerObject(this.gameLogo, 0, 1.2);
+    this.hpeDevLogo = this.add.sprite(0, 0, 'hpeDevLogo')
+      .setScale(0.5)
+    this.centerObject(this.hpeDevLogo, -4, 3);
     // start select box
     this.startSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(490, 445, 320, 50);
-
+      .fillRoundedRect(0, 0, 320, 50);
+    this.centerObject(this.startSelectionBox, 1.6, -1);
     // attract select box
     this.attractSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(490, 500, 320, 50);
+      .fillRoundedRect(0, 0, 320, 50)
     this.attractSelectionBox.visible = false;
+    this.centerObject(this.attractSelectionBox, 1.6, -1.5);
     // play and attract buttons
-    this.startButton = this.add.bitmapText(570, 450, 'arcadeFont', 'Start').setTint(0x000000).setInteractive();
-    this.attractButton = this.add.bitmapText(540, 505, 'arcadeFont', 'Attract').setTint(0xFFFFFF).setInteractive();
+    this.startButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Start').setTint(0x000000).setInteractive();
+    this.centerObject(this.startButton, 0.76, -1.08);
+    this.attractButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Attract').setTint(0xFFFFFF).setInteractive();
+    this.centerObject(this.attractButton, 1.08, -1.58);
   }
   onChange() {
     if (this.selection === 'start') {
@@ -58,11 +59,11 @@ export default class TitleScene extends Phaser.Scene {
      //  this.scene.start('Attract');
     }
   }
-  centerObject(gameObject, offset = 0) {
+  centerObject(gameObject, offsetX = 0, offsetY = 0) {
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
-    gameObject.x = width / 2;
-    gameObject.y = height / 2 - offset * 100
+    gameObject.x = width / 2 - offsetX * 100;
+    gameObject.y = height / 2 - offsetY * 100
   }
 }
