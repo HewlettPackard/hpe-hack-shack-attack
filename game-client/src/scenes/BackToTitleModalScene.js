@@ -88,7 +88,7 @@ export default class ErrorModalScene extends Phaser.Scene {
     this.message1 = this.add.bitmapText(this.width / 2 - 180, this.height / 2 - 180, 'arcadeFont', 'Cancel Submitting', 20);
     this.message2 = this.add.bitmapText(this.width / 2 - 180, this.height / 2 - 140, 'arcadeFont', 'your score?', 20);
     this.submitButton = this.add.bitmapText(this.width / 2 - 100, this.height / 2 - 45, 'arcadeFont', 'Yes', 18).setTint(0xFFFFFF);
-    this.cancelButton = this.add.bitmapText(this.width / 2, this.height / 2 - 45, 'arcadeFont', 'Cancel', 18).setTint(0x000000);
+    this.cancelButton = this.add.bitmapText(this.width / 2 + 35, this.height / 2 - 45, 'arcadeFont', 'No', 18).setTint(0x000000);
   }
   onSelect() {
     if (this.selection === 'cancel') {
