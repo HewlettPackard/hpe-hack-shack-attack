@@ -214,7 +214,7 @@ export default class GameScene extends Phaser.Scene {
         itMonster.setActive(true)
           .setVisible(true)
           .setSize(90, 90)
-          .spawn(this.width / 2, 0);
+          .spawn(this.width / 2, -80);
         let newTime = Phaser.Math.Between(5000, 10000);
         this.spawnTimerMonster = time + newTime;
       }
@@ -226,16 +226,16 @@ export default class GameScene extends Phaser.Scene {
     let y;
     switch(this.spawnSide[index]){
       case('left'):
-        x = Phaser.Math.Between(-15, -45);
+        x = Phaser.Math.Between(-65, -80);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('right'):
-        x = Phaser.Math.Between(this.width + 15, this.width + 45);
+        x = Phaser.Math.Between(this.width + 65, this.width + 80);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('bottom'):
         x = Phaser.Math.Between(0, this.width);
-        y = Phaser.Math.Between(this.height + 15, this.height + 45);
+        y = Phaser.Math.Between(this.height + 65, this.height + 80);
         return { x, y };
     }
   }
