@@ -26,6 +26,7 @@ import itMonster from '../assets/sprites/it-monster.png';
 import devGameOver from '../assets/sprites/dev-gameover.png';
 import dizzyAnim from '../assets/sprites/dizzyanim.png';
 import highscoreBG from '../assets/sprites/highscorebg.png';
+import monsterDeath from '../assets/sprites/monsterDeath.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -128,7 +129,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('itMonster', itMonster);
     this.load.image('devGameOver', devGameOver);
     this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
-    this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124  });
+    this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('monsterDeath', monsterDeath, { frameWidth: 64, frameHeight: 64 });
   }
   ready() {
     this.readyCount++;
