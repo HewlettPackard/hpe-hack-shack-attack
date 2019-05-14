@@ -5,6 +5,11 @@ export default class ErrorModalScene extends Phaser.Scene {
     super('BackToTitleModal');
   }
   init(data) {
+    this.gamepad;
+    this.buttonPressed = false;
+    this.stickPressed = false;
+    this.startScene = false;
+
     this.height = this.game.config.height;
     this.width = this.game.config.width;
 
@@ -12,13 +17,54 @@ export default class ErrorModalScene extends Phaser.Scene {
     this.score = data.score;
   }
   create() {
+    this.countdown();
     this.createModal();
     this.leftInput = this.input.keyboard.on('keyup_LEFT', this.onChange, this);
     this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
     this.select = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
   }
   update() {
-
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
+    if (this.startScene) {
+      this.gamepadInputs();
+    }
+  }
+  countdown() {
+    if (!this.startScene) {
+      const startTimer = this.time.addEvent({
+        delay: 500,
+        repeat: 1,
+        callback: () => {
+          if (startTimer.repeatCount === 1) {
+            this.startScene = true;
+          }
+        }
+      });
+    }
+  }
+  gamepadInputs() {
+    // A button
+    if (this.gamepad.A && this.buttonPressed === false) {
+      this.buttonPressed = true;
+      this.onSelect();
+    }
+    if (!this.gamepad.A) {
+      this.buttonPressed = false;
+    }
+    // joystick
+    if (this.gamepad.leftStick.x === -1 && this.stickPressed === false){
+      this.stickPressed = true;
+      this.onChange();
+    } else if (this.gamepad.leftStick.x === 1 && this.stickPressed === false) {
+      this.stickPressed = true;
+      this.onChange();
+    }
+    if (this.gamepad.leftStick.x === 0) {
+      this.stickPressed = false;
+    }
   }
   createModal() {
     this.mask = this.add.graphics()
@@ -46,8 +92,10 @@ export default class ErrorModalScene extends Phaser.Scene {
   }
   onSelect() {
     if (this.selection === 'cancel') {
+      this.startScene = false;
       this.scene.start('HighScore', { score: this.score });
     } else {
+      this.startScene = false;
       this.scene.start('Title');
     }
   }

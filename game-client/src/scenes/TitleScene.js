@@ -6,12 +6,16 @@ export default class TitleScene extends Phaser.Scene {
   }
   init () {
     this.selection = 'start';
+    this.gamepad;
+    this.buttonPressed = false;
+    this.stickPressed = false;
+
+    this.startScene = false;
   }
   create() {
-    // keyboard inputs
-    this.input.keyboard.on('keyup_UP', this.onChange, this);
-    this.input.keyboard.on('keyup_DOWN', this.onChange, this);
-    this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
+    this.countdown();
+    this.text = this.add.text(10, 600, '', { font: '16px Courier', fill: '#ffffff' });
+
     // logo
     this.gameLogo = this.add.sprite(0, 0, 'gameLogo')
       .setScale(0.8)
@@ -35,6 +39,50 @@ export default class TitleScene extends Phaser.Scene {
     this.centerObject(this.startButton, 0.76, -1.08);
     this.attractButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Attract').setTint(0xFFFFFF).setInteractive();
     this.centerObject(this.attractButton, 1.08, -1.58);
+
+  }
+  update (time) {
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
+    if (this.startScene) {
+      this.gamepadInputs();
+    }
+  }
+  countdown() {
+    if (!this.startScene) {
+      const startTimer = this.time.addEvent({
+        delay: 500,
+        repeat: 1,
+        callback: () => {
+          if (startTimer.repeatCount === 1) {
+            this.startScene = true;
+          }
+        }
+      });
+    }
+  }
+  gamepadInputs() {
+    // A button
+    if (this.gamepad.A && this.buttonPressed === false) {
+      this.buttonPressed = true;
+      this.onSelect();
+    }
+    if (!this.gamepad.A) {
+      this.buttonPressed = false;
+    }
+    // joystick
+    if (this.gamepad.leftStick.y === -1 && this.stickPressed === false){
+      this.stickPressed = true;
+      this.onChange();
+    } else if (this.gamepad.leftStick.y === 1 && this.stickPressed === false) {
+      this.stickPressed = true;
+      this.onChange();
+    }
+    if (this.gamepad.leftStick.y === 0) {
+      this.stickPressed = false;
+    }
   }
   onChange() {
     if (this.selection === 'start') {
@@ -53,6 +101,7 @@ export default class TitleScene extends Phaser.Scene {
   }
   onSelect() {
     if (this.selection === 'start') {
+      this.startScene = false;
       this.scene.start('Game');
     } else {
       // start attract

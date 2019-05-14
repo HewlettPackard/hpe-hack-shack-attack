@@ -24,8 +24,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.add.existing(this);
 
   }
-  update(moveKeys) {
-    this.onMove(moveKeys);
+  update(moveKeys, gamepad) {
+    this.onMove(moveKeys, gamepad);
     this.constrainVelocity(this, 350);
     this.animateInvincibility();
   }
@@ -58,8 +58,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.scene.cameras.main.on('camerafadeoutcomplete', () => this.scene.events.emit('gameover'));
     }
   }
-  onMove(moveKeys) {
+  onMove(moveKeys, gamepad) {
     this.setVelocity(0);
+    if (gamepad.axes.length) {
+      let x = gamepad.axes[0].getValue();
+      let y = gamepad.axes[1].getValue();
+      this.setVelocityX(350 * x);
+      this.setVelocityY(350 * y);
+    }
     if (moveKeys.up.isDown) {
       this.setVelocityY(-350);
     } else if (moveKeys.down.isDown) {

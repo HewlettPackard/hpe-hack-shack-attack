@@ -13,17 +13,19 @@ import floorTile2 from '../assets/tiles/floor-tile-2.png';
 import floorTile3 from '../assets/tiles/floor-tile-3.png';
 import floorTile4 from '../assets/tiles/floor-tile-4.png';
 import map from '../assets/sprites/playfield.png';
-// sprites
 // logos
 import gameLogo from '../assets/sprites/attack-marquee.png';
 import hpeDevLogo from '../assets/sprites/hpe-dev-logo.png';
 import hpeLogo from '../assets/sprites/dev-powerup.png';
-// game
+// sprites
 import playerAvatar from '../assets/sprites/player1-avatar.png';
 import player from '../assets/sprites/player1-dev.png';
 import bullet from '../assets/sprites/bullets-pellets.png';
 import itBug from '../assets/sprites/it-bug.png';
 import itMonster from '../assets/sprites/it-monster.png';
+import devGameOver from '../assets/sprites/dev-gameover.png';
+import dizzyAnim from '../assets/sprites/dizzyanim.png';
+import highscoreBG from '../assets/sprites/highscorebg.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -124,6 +126,9 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('bullet', bullet);
     this.load.image('itBug', itBug);
     this.load.image('itMonster', itMonster);
+    this.load.image('devGameOver', devGameOver);
+    this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
+    this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124  });
   }
   ready() {
     this.readyCount++;

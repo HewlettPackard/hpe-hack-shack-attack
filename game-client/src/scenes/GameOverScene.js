@@ -6,14 +6,19 @@ export default class GameOverScene extends Phaser.Scene {
   }
 
   init (data) {
+    this.gamepad;
+    this.buttonPressed = false;
+    this.stickPressed = false;
     this.selection = 'submit';
     this.score = data.score;
+    this.startScene = false;
 
     this.height = this.game.config.height;
     this.width = this.game.config.width;
   }
 
   create() {
+    this.countdown();
     // keyboard inputs
     this.input.keyboard.on('keyup_LEFT', this.onChange, this);
     this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
@@ -38,8 +43,64 @@ export default class GameOverScene extends Phaser.Scene {
     // submit and cancel buttons
     this.submitButton = this.add.bitmapText(this.width / 3, this.height / 2, 'arcadeFont', 'Submit').setTint(0x000000).setInteractive()
     this.cancelButton = this.add.bitmapText(this.width / 2, this.height / 2, 'arcadeFont', 'Cancel').setTint(0xFFFFFF).setInteractive()
-  }
+    
+    // sprites
+     this.dizzyAnimation = this.anims.create({
+      key: 'dizzy',
+      frames: this.anims.generateFrameNumbers('dizzyAnim', { start: 0, end: 13 }),
+      frameRate: 10,
+      repeat: -1
+    });
 
+    this.devGameOver = this.add.sprite(this.width / 2, this.height - 120, 'devGameOver')
+      .setScale(3);
+    this.dizzy = this.add.sprite(this.width / 2 + 10, this.height - 180, 'dizzyAnim')
+    .setScale(4)
+    .play('dizzy');
+  }
+  update(time) {
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
+    if (this.startScene) {
+      this.gamepadInputs();
+    }
+  }
+  countdown() {
+    if (!this.startScene) {
+      const startTimer = this.time.addEvent({
+        delay: 500,
+        repeat: 1,
+        callback: () => {
+          if (startTimer.repeatCount === 1) {
+            this.startScene = true;
+          }
+        }
+      });
+    }
+  }
+  gamepadInputs() {
+    // A button
+    if (this.gamepad.A && this.buttonPressed === false) {
+      this.buttonPressed = true;
+      this.onSelect();
+    }
+    if (!this.gamepad.A) {
+      this.buttonPressed = false;
+    }
+    // joystick
+    if (this.gamepad.leftStick.x === -1 && this.stickPressed === false){
+      this.stickPressed = true;
+      this.onChange();
+    } else if (this.gamepad.leftStick.x === 1 && this.stickPressed === false) {
+      this.stickPressed = true;
+      this.onChange();
+    }
+    if (this.gamepad.leftStick.x === 0) {
+      this.stickPressed = false;
+    }
+  }
   onChange() {
     if (this.selection === 'submit') {
       this.cancelSelectionBox.visible = true;
@@ -58,8 +119,10 @@ export default class GameOverScene extends Phaser.Scene {
 
   onSelect() {
     if (this.selection === 'submit') {
+      this.startScene = false;
      this.scene.start('HighScore', { score: this.score });
     } else {
+      this.startScene = false;
      this.scene.start('Title');
     }
   }

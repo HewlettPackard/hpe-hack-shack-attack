@@ -6,6 +6,12 @@ export default class HighScoreScene extends Phaser.Scene {
     super('HighScore');
   }
   init(data = 300) {
+    this.gamepad;
+    this.animationTimer;
+    this.buttonPressed = false;
+    this.stickPressed = false;
+    this.startScene = false;
+
     this.chars = [
       [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ],
       [ 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' ],
@@ -30,37 +36,112 @@ export default class HighScoreScene extends Phaser.Scene {
     this.submitSuccess = false;
   }
   create() {
+    this.countdown();
     this.createHighScoreMenu();
     this.addInputs();
     this.addEventListeners();
   }
-  update() {
+  update(time) {
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
+    if (this.startScene) {
+      this.gamepadInputs();
+    }
+
+  }
+  countdown() {
+    if (!this.startScene) {
+      const startTimer = this.time.addEvent({
+        delay: 500,
+        repeat: 1,
+        callback: () => {
+          if (startTimer.repeatCount === 1) {
+            this.startScene = true;
+          }
+        }
+      });
+    }
+  }
+  gamepadInputs() {
+    // A button
+    if (this.gamepad.A && this.buttonPressed === false) {
+      this.buttonPressed = true;
+      this.enter();
+    }
+    if (this.gamepad.B && this.buttonPressed === false) {
+      this.buttonPressed = true;
+      this.backspace();
+    }
+    if (!this.gamepad.A && !this.gamepad.B) {
+      this.buttonPressed = false;
+    }
+    // joystick
+    if (this.gamepad.leftStick.y === -1 && this.stickPressed === false){
+      this.stickPressed = true;
+      this.moveUp();
+    } else if (this.gamepad.leftStick.y === 1 && this.stickPressed === false) {
+      this.stickPressed = true;
+      this.moveDown();
+    }
+    if (this.gamepad.leftStick.x === -1 && this.stickPressed === false){
+      this.stickPressed = true;
+      this.moveLeft();
+    } else if (this.gamepad.leftStick.x === 1 && this.stickPressed === false) {
+      this.stickPressed = true;
+      this.moveRight();
+    }
+    if (this.gamepad.leftStick.y === 0 && this.gamepad.leftStick.x === 0) {
+      this.stickPressed = false;
+    }
   }
   resetScene() {
     this.submitSuccess = '';
     this.initials = '';
     this.name = '';
+    this.startScene = false;
     this.events.removeListener('updateInitials');
     this.events.removeListener('updateName');
     this.events.removeListener('submitUserData');
   }
   createHighScoreMenu() {
-    this.text = this.add.bitmapText(this.width / 2 - 250, this.height / 2 - 180, 'arcadeFont', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-', 55)
-      .setOrigin(0.5, 0.5)
-      .setLetterSpacing(30)
-      .setInteractive();
+    this.text = this.add.bitmapText(this.width / 2 - 250, this.height / 2 - 80, 'arcadeFont', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-', 55)
+    .setOrigin(0.5, 0.5)
+    .setLetterSpacing(30)
+    .setInteractive();
     
     this.add.image(this.text.x + 600, this.text.y + 110, 'rub').setScale(2);
     this.add.image(this.text.x + 705, this.text.y + 110, 'end').setScale(2);
+    
+    this.block = this.add.graphics()
+    .fillStyle(0xFFFFFF, 1)
+    .fillRect(this.text.x / 2 - 80, this.text.y / 2 + 80, 80, 12);
+    this.add.bitmapText(100, 490, 'arcadeFont', 'INITIALS', 35).setTint(0xFF1FDC83);
+    this.add.bitmapText(100, 590, 'arcadeFont', 'NAME', 35).setTint(0xFF1FDC83);
+    
+    this.initialText = this.add.bitmapText(100, 530, 'arcadeFont', '', 30).setTint(0xFFFFFF);
+    this.nameText = this.add.bitmapText(100, 630, 'arcadeFont', '', 30).setTint(0xFFFFFF);
+    
+    this.blinkAnimation = this.anims.create({
+      key: 'blink',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat: -1,
+      delay: 5000,
+      repeatDelay: 6000
+    });
+    
+    this.closeMouthAnimation = this.anims.create({
+      key: 'closeMouth',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 3, end: 7 }),
+      frameRate: 30,
+      repeat: 0
+    });
 
-    this.block = this.add.image(this.text.x / 2 - 40, this.text.y / 2 - 5, 'block');
-    this.block.setScale(2.2);
-
-    this.add.bitmapText(100, 400, 'arcadeFont', 'INITIALS', 35).setTint(0xFF1FDC83);
-    this.add.bitmapText(100, 500, 'arcadeFont', 'NAME', 35).setTint(0xFF1FDC83);
-
-    this.initialText = this.add.bitmapText(100, 440, 'arcadeFont', '', 30).setTint(0xFFFFFF);
-    this.nameText = this.add.bitmapText(100, 540, 'arcadeFont', '', 30).setTint(0xFFFFFF);
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG')
+      .setScale(8)
+      .play('blink');
 
     this.tweens.add({
       targets: this.block,
@@ -138,7 +219,10 @@ export default class HighScoreScene extends Phaser.Scene {
       .then(res => {
         if (res.status === 200) {
           this.resetScene();
-          this.scene.start('ThankYou');
+          this.background.play('closeMouth');
+          this.background.on('animationcomplete', (animation, frame) =>{
+            this.scene.start('ThankYou');
+          });
         }
       })
       .catch(err => {

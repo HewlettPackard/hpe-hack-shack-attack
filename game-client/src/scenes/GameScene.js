@@ -9,6 +9,7 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
   init() {
+    this.gamepad;
     this.spawnTimerBug = 0;
     this.spawnTimerMonster = 0;
     this.bulletTimer = 0;
@@ -80,7 +81,7 @@ export default class GameScene extends Phaser.Scene {
       .setImmovable(true);
 
     this.borderDark = this.add.graphics()
-      .fillStyle(0x000000, 1)
+      .fillStyle(0x11141A, 0.8)
       .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
       .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
       .fillRect(this.width / 2 - 82, 0, 150, 50)
@@ -88,7 +89,7 @@ export default class GameScene extends Phaser.Scene {
       .setDepth(2);
 
     this.borderLight = this.add.graphics()
-      .fillStyle(0x000000, 0.5)
+      .fillStyle(0x11141A, 0.5)
       .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
       .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
       .fillRect(this.width / 2 - 82, 0, 150, 75)
@@ -120,9 +121,13 @@ export default class GameScene extends Phaser.Scene {
       .setSize(70, 95, true);
   }
   update(time) {
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startRound) {
-      this.player.update(this.moveKeys, this.fireKeys);
-      this.fireBullets(time, this.fireKeys);
+      this.player.update(this.moveKeys, this.gamepad);
+      this.fireBullets(time, this.fireKeys, this.gamepad);
       this.spawnitBug(time);
       this.spawnitMonster(time);
 
@@ -162,16 +167,16 @@ export default class GameScene extends Phaser.Scene {
       });
     }
   }
-  fireBullets(time, key) {
+  fireBullets(time, key, gamepad) {
     if (time > this.bulletTimer) {
-      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown) {
+      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown || gamepad.A || gamepad.B || gamepad.buttons[3].pressed || gamepad.buttons[4].pressed) {
         let bullet = this.bullets.getFirstDead(false);
         if (!bullet) {
           bullet = new Bullet(this, 0, 0);
           this.bullets.add(bullet);
         }
         if (bullet) {
-          bullet.onFire(this.player.x, this.player.y, key);
+          bullet.onFire(this.player.x, this.player.y, key, gamepad);
           this.bulletTimer += 250;
         }
       } else {
