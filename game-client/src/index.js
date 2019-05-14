@@ -6,8 +6,8 @@ import TitleScene from './scenes/TitleScene';
 import GameScene from './scenes/GameScene';
 import GameOverScene from './scenes/GameOverScene';
 import HighScoreScene from './scenes/HighScoreScene';
-import ErrorModalScene from './scenes/ErrorModalScene';
-import BackToTitleModalScene from './scenes/BackToTitleModalScene';
+import ErrorScene from './scenes/ErrorScene';
+import BackToTitleScene from './scenes/BackToTitleScene';
 import ThankYouScene from './scenes/ThankYouScene';
 
 class Game extends Phaser.Game {
@@ -19,8 +19,8 @@ class Game extends Phaser.Game {
     this.scene.add('Game', GameScene);
     this.scene.add('GameOver', GameOverScene);
     this.scene.add('HighScore', HighScoreScene);
-    this.scene.add('BackToTitleModal', BackToTitleModalScene);
-    this.scene.add('ErrorModal', ErrorModalScene);
+    this.scene.add('BackToTitle', BackToTitleScene);
+    this.scene.add('Error', ErrorScene);
     this.scene.add('ThankYou', ThankYouScene);
     this.scene.start('Boot');
   }

@@ -123,6 +123,15 @@ export default class HighScoreScene extends Phaser.Scene {
     this.initialText = this.add.bitmapText(100, 530, 'arcadeFont', '', 30).setTint(0xFFFFFF);
     this.nameText = this.add.bitmapText(100, 630, 'arcadeFont', '', 30).setTint(0xFFFFFF);
     
+    this.tweens.add({
+      targets: this.block,
+      alpha: 0.2,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      duration: 350
+    });
+
     this.blinkAnimation = this.anims.create({
       key: 'blink',
       frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
@@ -134,7 +143,7 @@ export default class HighScoreScene extends Phaser.Scene {
     
     this.closeMouthAnimation = this.anims.create({
       key: 'closeMouth',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 3, end: 7 }),
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
       frameRate: 30,
       repeat: 0
     });
@@ -142,15 +151,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG')
       .setScale(8)
       .play('blink');
-
-    this.tweens.add({
-      targets: this.block,
-      alpha: 0.2,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-      duration: 350
-    });
+    this.background.anims.playReverse('closeMouth');
   }
   addEventListeners() {
     this.events.on('updateInitials', this.updateInitials, this);
@@ -227,7 +228,10 @@ export default class HighScoreScene extends Phaser.Scene {
       })
       .catch(err => {
         this.resetScene();
-        this.scene.start('ErrorModal', { score: this.score });
+        this.background.play('closeMouth');
+        this.background.on('animationcomplete', (animation, frame) =>{
+          this.scene.start('Error', { score: this.score });
+        });
       });
   }
   backspace() {
@@ -242,7 +246,10 @@ export default class HighScoreScene extends Phaser.Scene {
       this.events.emit('updateName', this.name);
     } else if (initialLength === 0) {
       this.resetScene();
-      this.scene.start('BackToTitleModal', { score: this.score });
+      this.background.play('closeMouth');
+      this.background.on('animationcomplete', (animation, frame) =>{
+        this.scene.start('BackToTitle', { score: this.score });
+      });
     }
   }
   enter() {

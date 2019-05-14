@@ -1,8 +1,8 @@
 import 'phaser';
 
-export default class ErrorModalScene extends Phaser.Scene {
+export default class BackToTitleScene extends Phaser.Scene {
   constructor() {
-    super('BackToTitleModal');
+    super('BackToTitle');
   }
   init(data) {
     this.gamepad;
@@ -18,7 +18,8 @@ export default class ErrorModalScene extends Phaser.Scene {
   }
   create() {
     this.countdown();
-    this.createModal();
+    this.createScene();
+    this.createAnimations();
     this.leftInput = this.input.keyboard.on('keyup_LEFT', this.onChange, this);
     this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
     this.select = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
@@ -66,37 +67,54 @@ export default class ErrorModalScene extends Phaser.Scene {
       this.stickPressed = false;
     }
   }
-  createModal() {
-    this.mask = this.add.graphics()
-      .fillStyle(0x000000, 0.5)
-      .fillRect(0, 0, this.width, this.height);
-    this.border = this.add.graphics()
-      .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 210, this.height / 2 - 210, 420, 220);
-    this.background = this.add.graphics()
-      .fillStyle(0x000000, 1)
-      .fillRoundedRect(this.width / 2 - 200, this.height / 2 - 200, 400, 200);
-      
+  createScene() {
     this.submitSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 135, this.height / 2 - 55, 120, 40);
+      .fillRoundedRect(this.width / 2 - 230, this.height / 2 + 95, 200, 65);
     this.submitSelectionBox.visible = false;
     this.cancelSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 5, this.height / 2 - 55, 120, 40);
+      .fillRoundedRect(this.width / 2 + 50, this.height / 2 + 95, 200, 65);
+    this.message1 = this.add.bitmapText(this.width / 2 - 420, this.height / 2 - 120, 'arcadeFont', 'Cancel submitting', 50);
+    this.message2 = this.add.bitmapText(this.width / 2 - 260, this.height / 2 - 40, 'arcadeFont', 'your score?', 50);
+    this.submitButton = this.add.bitmapText(this.width / 2 - 200, this.height / 2 + 100, 'arcadeFont', 'Yes', 45).setTint(0xFFFFFF);
+    this.cancelButton = this.add.bitmapText(this.width / 2 + 100, this.height / 2 + 100, 'arcadeFont', 'No', 45).setTint(0x000000);
 
-    this.message1 = this.add.bitmapText(this.width / 2 - 180, this.height / 2 - 180, 'arcadeFont', 'Cancel Submitting', 20);
-    this.message2 = this.add.bitmapText(this.width / 2 - 180, this.height / 2 - 140, 'arcadeFont', 'your score?', 20);
-    this.submitButton = this.add.bitmapText(this.width / 2 - 100, this.height / 2 - 45, 'arcadeFont', 'Yes', 18).setTint(0xFFFFFF);
-    this.cancelButton = this.add.bitmapText(this.width / 2 + 35, this.height / 2 - 45, 'arcadeFont', 'No', 18).setTint(0x000000);
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG', [7])
+      .setScale(8)
+  }
+  createAnimations() {
+    this.blinkAnimation = this.anims.create({
+      key: 'blink',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat: -1,
+      delay: 5000,
+      repeatDelay: 6000
+    });
+    this.closeMouthAnimation = this.anims.create({
+      key: 'closeMouth',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 3, end: 7 }),
+      frameRate: 30,
+      delay: 500,
+      repeat: 0
+    });
+    this.background.play('blink');
+    this.background.anims.playReverse('closeMouth');
   }
   onSelect() {
     if (this.selection === 'cancel') {
       this.startScene = false;
-      this.scene.start('HighScore', { score: this.score });
+      this.background.play('closeMouth');
+      this.background.on('animationcomplete', () => {
+        this.scene.start('HighScore', { score: this.score });
+      });
     } else {
       this.startScene = false;
-      this.scene.start('Title');
+      this.background.play('closeMouth');
+      this.background.on('animationcomplete', () => {
+        this.scene.start('Title');
+      });
     }
   }
   onChange() {
