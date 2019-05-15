@@ -125,9 +125,9 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('playerAvatar', playerAvatar);
     this.load.image('player', player);
     this.load.image('bullet', bullet);
-    this.load.image('itBug', itBug);
-    this.load.image('itMonster', itMonster);
     this.load.image('devGameOver', devGameOver);
+    this.load.spritesheet('itBug', itBug, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('itMonster', itMonster, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
     this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('monsterDeath', monsterDeath, { frameWidth: 64, frameHeight: 64 });
@@ -135,7 +135,7 @@ export default class PreloaderScene extends Phaser.Scene {
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('HighScore');
+      this.scene.start('Game');
     }
   }
 }

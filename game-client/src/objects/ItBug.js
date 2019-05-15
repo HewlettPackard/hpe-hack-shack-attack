@@ -16,10 +16,17 @@ export default class ItBug extends Phaser.Physics.Arcade.Sprite {
       frameRate: 30,
       repeat: 0,
     });
+    this.bounce = this.scene.anims.create({
+      key: 'bounce',
+      frames: this.scene.anims.generateFrameNumbers('itBug', { start: 0, end: 6 }),
+      frameRate: 15,
+      repeat: -1,
+    });
   }
   spawn(x, y) {
     this.hp = 2;
     this.setPosition(x, y);
+    this.play('bounce');
   }
 
   onHit(damage) {

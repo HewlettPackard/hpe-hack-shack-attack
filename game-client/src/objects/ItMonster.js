@@ -16,10 +16,17 @@ export default class ItMonster extends Phaser.Physics.Arcade.Sprite {
       frameRate: 30,
       repeat: 0,
     });
+    this.walk = this.scene.anims.create({
+      key: 'walk',
+      frames: this.scene.anims.generateFrameNumbers('itMonster', { start: 0, end: 7 }),
+      frameRate: 20,
+      repeat: -1,
+    });
   }
   spawn(x, y) {
     this.hp = 3;
     this.setPosition(x, y);
+    this.play('walk');
   }
 
   onHit(damage) {
