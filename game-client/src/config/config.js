@@ -16,5 +16,5 @@ export const config = {
     }
   }
 };
-
+//1920 1080
 export const API_URL="http://localhost:3002/api/user/create";

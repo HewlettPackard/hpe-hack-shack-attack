@@ -59,8 +59,8 @@ export default class ErrorScene extends Phaser.Scene {
     this.acceptButton = this.add.bitmapText(this.width / 2 - 50, this.height / 2 + 150, 'arcadeFont', 'OK', 45)
       .setTint(0xFFFFFF)
 
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG', [7])
-      .setScale(8)
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
   }
   createAnimations() {
     this.tweens.add({
@@ -73,7 +73,7 @@ export default class ErrorScene extends Phaser.Scene {
     });
     this.blinkAnimation = this.anims.create({
       key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
       frameRate: 8,
       repeat: -1,
       delay: 5000,
@@ -86,9 +86,8 @@ export default class ErrorScene extends Phaser.Scene {
       delay: 500,
       repeat: 0
     });
-    this.background.play('blink');
+    this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
-
   }
   enter() {
     this.startScene = false;

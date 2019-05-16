@@ -38,6 +38,7 @@ export default class HighScoreScene extends Phaser.Scene {
   create() {
     this.countdown();
     this.createHighScoreMenu();
+    this.createAnimations();
     this.addInputs();
     this.addEventListeners();
   }
@@ -122,7 +123,10 @@ export default class HighScoreScene extends Phaser.Scene {
     
     this.initialText = this.add.bitmapText(100, 530, 'arcadeFont', '', 30).setTint(0xFFFFFF);
     this.nameText = this.add.bitmapText(100, 630, 'arcadeFont', '', 30).setTint(0xFFFFFF);
-    
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
+  }
+  createAnimations() {
     this.tweens.add({
       targets: this.block,
       alpha: 0.2,
@@ -134,11 +138,11 @@ export default class HighScoreScene extends Phaser.Scene {
 
     this.blinkAnimation = this.anims.create({
       key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
       frameRate: 8,
       repeat: -1,
-      delay: 5000,
-      repeatDelay: 6000
+      delay: 3000,
+      repeatDelay: 4000
     });
     
     this.closeMouthAnimation = this.anims.create({
@@ -147,10 +151,7 @@ export default class HighScoreScene extends Phaser.Scene {
       frameRate: 30,
       repeat: 0
     });
-
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG')
-      .setScale(8)
-      .play('blink');
+    this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
   }
   addEventListeners() {

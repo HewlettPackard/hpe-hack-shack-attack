@@ -24,7 +24,7 @@ export default class ItMonster extends Phaser.Physics.Arcade.Sprite {
     });
   }
   spawn(x, y) {
-    this.hp = 3;
+    this.hp = 5;
     this.setPosition(x, y);
     this.play('walk');
   }

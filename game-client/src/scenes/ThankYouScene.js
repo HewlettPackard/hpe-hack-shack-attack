@@ -30,8 +30,8 @@ export default class ThankYouScene extends Phaser.Scene {
 
     this.startText = this.add.bitmapText(this.width / 2, this.height - 350, 'arcadeFont', 'Press A to start over', 20).setTint(0xFFFFFFFF).setOrigin(0.5, 0.5);
 
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG', [7])
-      .setScale(8)
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
   }
   createAnimations() {
     this.startTextFade = this.tweens.add({
@@ -45,7 +45,7 @@ export default class ThankYouScene extends Phaser.Scene {
     
     this.blinkAnimation = this.anims.create({
       key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
       frameRate: 8,
       repeat: -1,
       delay: 5000,
@@ -59,10 +59,8 @@ export default class ThankYouScene extends Phaser.Scene {
       delay: 500,
       repeat: 0
     });
-
-    this.background.play('blink');
+    this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
-
   }
   gamepadInputs() {
     if (this.gamepad.A && this.buttonPressed === false) {

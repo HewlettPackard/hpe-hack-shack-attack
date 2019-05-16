@@ -135,7 +135,7 @@ export default class GameScene extends Phaser.Scene {
         this.itBugs.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 150);
+        this.player, 225);
 
       Phaser.Utils.Array.Each(
         this.itMonsters.getChildren(),
@@ -196,9 +196,9 @@ export default class GameScene extends Phaser.Scene {
         itBug.setActive(true)
           .setVisible(true)
           .setScale(0.6)
-          .setCircle(34, 15, 18)
+          .setCircle(34, 15, 50)
           .spawn(coords.x, coords.y);
-        let newTime = Phaser.Math.Between(500, 1500);
+        let newTime = Phaser.Math.Between(500, 800);
         this.spawnTimerBug = time + newTime;
       }
     }
@@ -213,9 +213,9 @@ export default class GameScene extends Phaser.Scene {
       if (itMonster) {
         itMonster.setActive(true)
           .setVisible(true)
-          .setSize(90, 90)
-          .spawn(this.width / 2, -80);
-        let newTime = Phaser.Math.Between(5000, 10000);
+          .setSize(80, 90)
+          .spawn(this.width / 2, - 80);
+        let newTime = Phaser.Math.Between(1500, 2500);
         this.spawnTimerMonster = time + newTime;
       }
     }

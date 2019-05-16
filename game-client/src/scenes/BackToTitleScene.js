@@ -80,13 +80,13 @@ export default class BackToTitleScene extends Phaser.Scene {
     this.submitButton = this.add.bitmapText(this.width / 2 - 200, this.height / 2 + 100, 'arcadeFont', 'Yes', 45).setTint(0xFFFFFF);
     this.cancelButton = this.add.bitmapText(this.width / 2 + 100, this.height / 2 + 100, 'arcadeFont', 'No', 45).setTint(0x000000);
 
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG', [7])
-      .setScale(8)
+    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
   }
   createAnimations() {
     this.blinkAnimation = this.anims.create({
       key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
       frameRate: 8,
       repeat: -1,
       delay: 5000,
@@ -99,7 +99,7 @@ export default class BackToTitleScene extends Phaser.Scene {
       delay: 500,
       repeat: 0
     });
-    this.background.play('blink');
+    this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
   }
   onSelect() {

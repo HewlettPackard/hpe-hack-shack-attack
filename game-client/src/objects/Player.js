@@ -41,7 +41,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.immune === false) {
       this.lives -= damage;
       livesText.setText(`Lives:${this.lives}`);
-      this.scene.cameras.main.shake(200);
+      this.scene.cameras.main.shake(120);
       this.immune = true;
   
       this.scene.time.addEvent({
