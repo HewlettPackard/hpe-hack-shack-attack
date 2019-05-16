@@ -124,9 +124,9 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('hpeLogo', hpeLogo);
 
     this.load.image('playerAvatar', playerAvatar);
-    this.load.image('player', player);
     this.load.image('bullet', bullet);
     this.load.image('devGameOver', devGameOver);
+    this.load.spritesheet('player', player, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('itBug', itBug, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('itMonster', itMonster, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
@@ -137,7 +137,7 @@ export default class PreloaderScene extends Phaser.Scene {
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('HighScore');
+      this.scene.start('Game');
     }
   }
 }

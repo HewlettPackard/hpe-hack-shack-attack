@@ -19,7 +19,30 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       duration: 200,
       paused: true
     });
-
+    this.up = this.scene.anims.create({
+      key: 'up',
+      frames: this.scene.anims.generateFrameNumbers('player', { start: 3, end: 3 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.down = this.scene.anims.create({
+      key: 'down',
+      frames: this.scene.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.left = this.scene.anims.create({
+      key: 'left',
+      frames: this.scene.anims.generateFrameNumbers('player', { start: 2, end: 2 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.right = this.scene.anims.create({
+      key: 'right',
+      frames: this.scene.anims.generateFrameNumbers('player', { start: 1, end: 1 }),
+      repeat: -1,
+      frameRate: 10
+    });
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
@@ -58,6 +81,25 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.scene.cameras.main.on('camerafadeoutcomplete', () => this.scene.events.emit('gameover'));
     }
   }
+  handleAnimation(x, y) {
+    // if y is greater choose up or down
+    // if x is greater choose left or right
+    if (Math.abs(x) > Math.abs(y)) {
+      if (x < 0 ) {
+        this.play('left');
+      }
+      if (x > 0) {
+        this.play('right');
+      }
+    } else {
+      if (y > 0) {
+        this.play('down');
+      }
+      if (y < 0) {
+        this.play('up');
+      }
+    }
+  }
   onMove(moveKeys, gamepad) {
     this.setVelocity(0);
     if (gamepad.axes.length) {
@@ -65,6 +107,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       let y = gamepad.axes[1].getValue();
       this.setVelocityX(350 * x);
       this.setVelocityY(350 * y);
+
+      this.handleAnimation(x, y);
     }
     if (moveKeys.up.isDown) {
       this.setVelocityY(-350);
