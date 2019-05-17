@@ -13,12 +13,17 @@ export default class ItBug extends Phaser.Physics.Arcade.Sprite {
   spawn(x, y) {
     this.hp = 2;
     this.setPosition(x, y);
+    this.play('bounce');
   }
 
   onHit(damage) {
     this.hp -= damage;
 
     if (this.hp <= 0) {
+      this.scene.add.sprite(this.x, this.y, 'monsterDeath')
+      .setScale(1.5)
+      .play('death');
+
       this.setActive(false);
       this.setVisible(false);
       this.disableBody();

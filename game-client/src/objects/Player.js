@@ -19,13 +19,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       duration: 200,
       paused: true
     });
-
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
 
   }
-  update(moveKeys) {
-    this.onMove(moveKeys);
+  update(moveKeys, gamepad) {
+    this.onMove(moveKeys, gamepad);
     this.constrainVelocity(this, 350);
     this.animateInvincibility();
   }
@@ -41,7 +40,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.immune === false) {
       this.lives -= damage;
       livesText.setText(`Lives:${this.lives}`);
-      this.scene.cameras.main.shake(200);
+      this.scene.cameras.main.shake(120);
       this.immune = true;
   
       this.scene.time.addEvent({
@@ -58,17 +57,50 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.scene.cameras.main.on('camerafadeoutcomplete', () => this.scene.events.emit('gameover'));
     }
   }
-  onMove(moveKeys) {
+  handleAnimation(x, y) {
+    // if y is greater choose up or down
+    // if x is greater choose left or right
+    if (Math.abs(x) > Math.abs(y)) {
+      if (x < 0 ) {
+        this.play('left', true);
+      }
+      if (x > 0) {
+        this.play('right', true);
+      }
+    } else if (Math.abs(y) > Math.abs(x)) {
+      if (y > 0) {
+        this.play('down', true);
+      }
+      if (y < 0) {
+        this.play('up', true);
+      }
+    } else {
+      this.anims.stop();
+    }
+  }
+  onMove(moveKeys, gamepad) {
     this.setVelocity(0);
+    if (gamepad.axes.length) {
+      let x = gamepad.axes[0].getValue();
+      let y = gamepad.axes[1].getValue();
+      this.setVelocityX(350 * x);
+      this.setVelocityY(350 * y);
+
+      this.handleAnimation(x, y);
+    }
     if (moveKeys.up.isDown) {
       this.setVelocityY(-350);
+      this.play('up', true);
     } else if (moveKeys.down.isDown) {
       this.setVelocityY(350);
+      this.play('down', true);
     }
     if (moveKeys.left.isDown) {
       this.setVelocityX(-350);
+      this.play('left', true);
     } else if (moveKeys.right.isDown) {
       this.setVelocityX(350);
+      this.play('right', true);
     }
   }
 

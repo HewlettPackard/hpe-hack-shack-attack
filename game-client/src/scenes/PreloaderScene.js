@@ -13,17 +13,21 @@ import floorTile2 from '../assets/tiles/floor-tile-2.png';
 import floorTile3 from '../assets/tiles/floor-tile-3.png';
 import floorTile4 from '../assets/tiles/floor-tile-4.png';
 import map from '../assets/sprites/playfield.png';
-// sprites
 // logos
 import gameLogo from '../assets/sprites/attack-marquee.png';
 import hpeDevLogo from '../assets/sprites/hpe-dev-logo.png';
 import hpeLogo from '../assets/sprites/dev-powerup.png';
-// game
+// sprites
 import playerAvatar from '../assets/sprites/player1-avatar.png';
 import player from '../assets/sprites/player1-dev.png';
 import bullet from '../assets/sprites/bullets-pellets.png';
 import itBug from '../assets/sprites/it-bug.png';
 import itMonster from '../assets/sprites/it-monster.png';
+import devGameOver from '../assets/sprites/dev-gameover.png';
+import dizzyAnim from '../assets/sprites/dizzyanim.png';
+import highscoreBG from '../assets/sprites/highscorebg.png';
+import monsterDeath from '../assets/sprites/monsterDeath.png';
+import highscoreEyes from '../assets/sprites/highscoreeyes.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -120,10 +124,86 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('hpeLogo', hpeLogo);
 
     this.load.image('playerAvatar', playerAvatar);
-    this.load.image('player', player);
     this.load.image('bullet', bullet);
-    this.load.image('itBug', itBug);
-    this.load.image('itMonster', itMonster);
+    this.load.image('devGameOver', devGameOver);
+    this.load.spritesheet('player', player, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('itBug', itBug, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('itMonster', itMonster, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
+    this.load.spritesheet('highscoreEyes', highscoreEyes, { frameWidth: 167, frameHeight: 96 });
+    this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('monsterDeath', monsterDeath, { frameWidth: 64, frameHeight: 64 });
+  }
+  create() {
+    // animations
+
+    // enemy specific animations
+    this.anims.create({
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('monsterDeath', { start: 0, end: 5 }),
+      frameRate: 30,
+      repeat: 0,
+    });
+    this.anims.create({
+      key: 'bounce',
+      frames: this.anims.generateFrameNumbers('itBug', { start: 0, end: 6 }),
+      frameRate: 15,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('itMonster', { start: 0, end: 7 }),
+      frameRate: 20,
+      repeat: -1,
+    });
+    // player specific animations
+    this.anims.create({
+      key: 'up',
+      frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'down',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    // highscore scene specific animations
+    this.anims.create({
+      key: 'blink',
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat: -1,
+      delay: 5000,
+      repeatDelay: 6000
+    });
+    this.anims.create({
+      key: 'closeMouth',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
+      frameRate: 30,
+      delay: 200,
+      repeat: 0
+    });
+    // gameover scene specific animations
+    this.anims.create({
+      key: 'dizzy',
+      frames: this.anims.generateFrameNumbers('dizzyAnim', { start: 0, end: 13 }),
+      frameRate: 10,
+      repeat: -1
+    });
   }
   ready() {
     this.readyCount++;

@@ -9,6 +9,7 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
   init() {
+    this.gamepad;
     this.spawnTimerBug = 0;
     this.spawnTimerMonster = 0;
     this.bulletTimer = 0;
@@ -80,7 +81,7 @@ export default class GameScene extends Phaser.Scene {
       .setImmovable(true);
 
     this.borderDark = this.add.graphics()
-      .fillStyle(0x000000, 1)
+      .fillStyle(0x11141A, 0.8)
       .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
       .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
       .fillRect(this.width / 2 - 82, 0, 150, 50)
@@ -88,7 +89,7 @@ export default class GameScene extends Phaser.Scene {
       .setDepth(2);
 
     this.borderLight = this.add.graphics()
-      .fillStyle(0x000000, 0.5)
+      .fillStyle(0x11141A, 0.5)
       .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
       .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
       .fillRect(this.width / 2 - 82, 0, 150, 75)
@@ -120,9 +121,13 @@ export default class GameScene extends Phaser.Scene {
       .setSize(70, 95, true);
   }
   update(time) {
+    if (this.input.gamepad.total === 0 ) {
+      return;
+    }
+    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startRound) {
-      this.player.update(this.moveKeys, this.fireKeys);
-      this.fireBullets(time, this.fireKeys);
+      this.player.update(this.moveKeys, this.gamepad);
+      this.fireBullets(time, this.fireKeys, this.gamepad);
       this.spawnitBug(time);
       this.spawnitMonster(time);
 
@@ -130,7 +135,7 @@ export default class GameScene extends Phaser.Scene {
         this.itBugs.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 150);
+        this.player, 225);
 
       Phaser.Utils.Array.Each(
         this.itMonsters.getChildren(),
@@ -162,16 +167,16 @@ export default class GameScene extends Phaser.Scene {
       });
     }
   }
-  fireBullets(time, key) {
+  fireBullets(time, key, gamepad) {
     if (time > this.bulletTimer) {
-      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown) {
+      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown || gamepad.A || gamepad.B || gamepad.buttons[3].pressed || gamepad.buttons[4].pressed) {
         let bullet = this.bullets.getFirstDead(false);
         if (!bullet) {
           bullet = new Bullet(this, 0, 0);
           this.bullets.add(bullet);
         }
         if (bullet) {
-          bullet.onFire(this.player.x, this.player.y, key);
+          bullet.onFire(this.player.x, this.player.y, key, gamepad);
           this.bulletTimer += 250;
         }
       } else {
@@ -191,9 +196,9 @@ export default class GameScene extends Phaser.Scene {
         itBug.setActive(true)
           .setVisible(true)
           .setScale(0.6)
-          .setCircle(34, 15, 18)
+          .setCircle(34, 15, 50)
           .spawn(coords.x, coords.y);
-        let newTime = Phaser.Math.Between(500, 1500);
+        let newTime = Phaser.Math.Between(500, 800);
         this.spawnTimerBug = time + newTime;
       }
     }
@@ -208,9 +213,9 @@ export default class GameScene extends Phaser.Scene {
       if (itMonster) {
         itMonster.setActive(true)
           .setVisible(true)
-          .setSize(90, 90)
-          .spawn(this.width / 2, 0);
-        let newTime = Phaser.Math.Between(5000, 10000);
+          .setSize(80, 90)
+          .spawn(this.width / 2, - 80);
+        let newTime = Phaser.Math.Between(1500, 2500);
         this.spawnTimerMonster = time + newTime;
       }
     }
@@ -221,16 +226,16 @@ export default class GameScene extends Phaser.Scene {
     let y;
     switch(this.spawnSide[index]){
       case('left'):
-        x = Phaser.Math.Between(-15, -45);
+        x = Phaser.Math.Between(-65, -80);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('right'):
-        x = Phaser.Math.Between(this.width + 15, this.width + 45);
+        x = Phaser.Math.Between(this.width + 65, this.width + 80);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('bottom'):
         x = Phaser.Math.Between(0, this.width);
-        y = Phaser.Math.Between(this.height + 15, this.height + 45);
+        y = Phaser.Math.Between(this.height + 65, this.height + 80);
         return { x, y };
     }
   }
