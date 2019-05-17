@@ -23,7 +23,7 @@ export default class GameOverScene extends Phaser.Scene {
 
     this.gameOverText  = this.add.bitmapText(this.width / 2, this.height / 2 - 350, 'arcadeFont', 'GAME OVER', 120).setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
-    this.scoreText  = this.add.bitmapText(this.width / 2, this.height / 2 - 200, 'arcadeFont', `You got ${this.score}pts!`, 70).setTint(0xFFFFFF)
+    this.scoreText  = this.add.bitmapText(this.width / 2 + 50, this.height / 2 - 200, 'arcadeFont', `You got ${this.score}pts!`, 70).setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
 
     // submit select box
