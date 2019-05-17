@@ -61,7 +61,7 @@ export default class ErrorScene extends Phaser.Scene {
     this.message1 = this.add.bitmapText(this.width / 2 - 680, this.height / 2 - 180, 'arcadeFont', 'There was an error when', 60);
     this.message2 = this.add.bitmapText(this.width / 2 - 620, this.height / 2 - 100, 'arcadeFont', 'submitting your score', 60);
     this.message4 = this.add.bitmapText(this.width / 2 + 620, this.height / 2 - 75, 'arcadeFont', '.', 60);
-    this.acceptButton = this.add.bitmapText(this.width / 2 - 490, this.height / 2 + 80, 'arcadeFont', 'Press A or Enter to continue', 35)
+    this.acceptText = this.add.bitmapText(this.width / 2 - 490, this.height / 2 + 80, 'arcadeFont', 'Press A or Enter to continue', 35)
       .setTint(0xFFFFFF)
 
     this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
@@ -69,7 +69,7 @@ export default class ErrorScene extends Phaser.Scene {
   }
   createAnimations() {
     this.tweens.add({
-      targets: this.acceptButton,
+      targets: this.acceptText,
       alpha: 0,
       yoyo: true,
       repeat: -1,
