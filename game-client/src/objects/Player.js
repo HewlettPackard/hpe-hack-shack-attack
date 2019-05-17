@@ -24,7 +24,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   }
   update(moveKeys, gamepad) {
-    this.onMove(moveKeys, gamepad);
+    if (gamepad) {
+      this.onMoveGamepad(gamepad);
+    } else {
+      this.onMoveKeyboard(moveKeys);
+    }
+    if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
+      this.anims.stop();
+    }
     this.constrainVelocity(this, 350);
     this.animateInvincibility();
   }
@@ -58,8 +65,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
   handleAnimation(x, y) {
-    // if y is greater choose up or down
-    // if x is greater choose left or right
     if (Math.abs(x) > Math.abs(y)) {
       if (x < 0 ) {
         this.play('left', true);
@@ -74,20 +79,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       if (y < 0) {
         this.play('up', true);
       }
-    } else {
-      this.anims.stop();
     }
   }
-  onMove(moveKeys, gamepad) {
+  onMoveGamepad(gamepad) {
     this.setVelocity(0);
     if (gamepad.axes.length) {
       let x = gamepad.axes[0].getValue();
       let y = gamepad.axes[1].getValue();
       this.setVelocityX(350 * x);
       this.setVelocityY(350 * y);
-
       this.handleAnimation(x, y);
     }
+  }
+
+  onMoveKeyboard(moveKeys) {
+    this.setVelocity(0);
     if (moveKeys.up.isDown) {
       this.setVelocityY(-350);
       this.play('up', true);

@@ -18,18 +18,19 @@ export default class ThankYouScene extends Phaser.Scene {
     this.keyboardInputs();
   }
   update() {
-    if (this.input.gamepad.total === 0 ) {
-      return;
+    if (this.input.gamepad.total > 0 ) {
+      this.gamepad = this.input.gamepad.getPad(0);
     }
-    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startScene) {
-      this.gamepadInputs();
+      if (this.gamepad) {
+        this.gamepadInputs();
+      }
     }
   }
   createThankYou() {
     this.add.bitmapText(this.width / 2 + 10, this.height / 2 - 50, 'arcadeFont', 'THANKS FOR PLAYING!', 65).setTint(0xFFFFFF).setOrigin(0.5, 0.5)
 
-    this.startText = this.add.bitmapText(this.width / 2, this.height - 350, 'arcadeFont', 'Press A to start over', 20).setTint(0xFFFFFFFF).setOrigin(0.5, 0.5);
+    this.startText = this.add.bitmapText(this.width / 2, this.height - 350, 'arcadeFont', 'Press A or Enter to start over', 20).setTint(0xFFFFFFFF).setOrigin(0.5, 0.5);
 
     this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
     this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);

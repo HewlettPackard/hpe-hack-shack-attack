@@ -50,12 +50,13 @@ export default class GameOverScene extends Phaser.Scene {
     .play('dizzy');
   }
   update(time) {
-    if (this.input.gamepad.total === 0 ) {
-      return;
+    if (this.input.gamepad.total > 0) {
+      this.gamepad = this.input.gamepad.getPad(0);
     }
-    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startScene) {
-      this.gamepadInputs();
+      if (this.gamepad) {
+        this.gamepadInputs();
+      }
     }
   }
   keyboardInputs() {
