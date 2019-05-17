@@ -121,13 +121,16 @@ export default class GameScene extends Phaser.Scene {
       .setSize(70, 95, true);
   }
   update(time) {
-    if (this.input.gamepad.total === 0 ) {
-      return;
+    if (this.input.gamepad.total > 0 ) {
+      this.gamepad = this.input.gamepad.getPad(0);
     }
-    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startRound) {
       this.player.update(this.moveKeys, this.gamepad);
-      this.fireBullets(time, this.fireKeys, this.gamepad);
+      if (this.gamepad) {
+        this.fireBulletsGamepad(time, this.gamepad);
+      } else {
+        this.fireBulletsKeyboard(time, this.fireKeys);
+      }
       this.spawnitBug(time);
       this.spawnitMonster(time);
 
@@ -167,16 +170,33 @@ export default class GameScene extends Phaser.Scene {
       });
     }
   }
-  fireBullets(time, key, gamepad) {
+  fireBulletsGamepad(time, gamepad) {
     if (time > this.bulletTimer) {
-      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown || gamepad.A || gamepad.B || gamepad.buttons[3].pressed || gamepad.buttons[4].pressed) {
+      if (gamepad.A || gamepad.B || gamepad.buttons[3].pressed || gamepad.buttons[4].pressed) {
         let bullet = this.bullets.getFirstDead(false);
         if (!bullet) {
           bullet = new Bullet(this, 0, 0);
           this.bullets.add(bullet);
         }
         if (bullet) {
-          bullet.onFire(this.player.x, this.player.y, key, gamepad);
+          bullet.onFireGamepad(this.player.x, this.player.y, gamepad);
+          this.bulletTimer += 250;
+        }
+      } else {
+        this.bulletTimer += 250;
+      }     
+    }
+  }
+  fireBulletsKeyboard(time, key) {
+    if (time > this.bulletTimer) {
+      if (key.up.isDown || key.down.isDown || key.right.isDown || key.left.isDown) {
+        let bullet = this.bullets.getFirstDead(false);
+        if (!bullet) {
+          bullet = new Bullet(this, 0, 0);
+          this.bullets.add(bullet);
+        }
+        if (bullet) {
+          bullet.onFireKeyboard(this.player.x, this.player.y, key);
           this.bulletTimer += 250;
         }
       } else {

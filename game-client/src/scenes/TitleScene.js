@@ -43,12 +43,13 @@ export default class TitleScene extends Phaser.Scene {
     this.keyboardInputs();
   }
   update (time) {
-    if (this.input.gamepad.total === 0 ) {
-      return;
+    if (this.input.gamepad.total > 0 ) {
+      this.gamepad = this.input.gamepad.getPad(0);
     }
-    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startScene) {
-      this.gamepadInputs();
+      if (this.gamepad) {
+        this.gamepadInputs();
+      }
     }
   }
   keyboardInputs() {

@@ -44,15 +44,27 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  onFire(x, y, fireKeys, gamepad) {
-    if (fireKeys.up.isDown || gamepad.buttons[4].pressed) {
+  onFireGamepad(x, y, gamepad) {
+    if (gamepad.buttons[4].pressed) {
       this.fireBullet(x, y, 'up')
-    } else if (fireKeys.down.isDown || gamepad.A) {
+    } else if (gamepad.A) {
       this.fireBullet(x, y, 'down')
     }
-    if (fireKeys.left.isDown || gamepad.buttons[3].pressed) {
+    if (gamepad.buttons[3].pressed) {
       this.fireBullet(x, y, 'left')
-    } else if (fireKeys.right.isDown || gamepad.B) {
+    } else if (gamepad.B) {
+      this.fireBullet(x, y, 'right')
+    }
+  }
+  onFireKeyboard(x, y, fireKeys) {
+    if (fireKeys.up.isDown) {
+      this.fireBullet(x, y, 'up')
+    } else if (fireKeys.down.isDown) {
+      this.fireBullet(x, y, 'down')
+    }
+    if (fireKeys.left.isDown) {
+      this.fireBullet(x, y, 'left')
+    } else if (fireKeys.right.isDown) {
       this.fireBullet(x, y, 'right')
     }
   }

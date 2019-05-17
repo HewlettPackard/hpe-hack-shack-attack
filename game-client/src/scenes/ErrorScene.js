@@ -22,12 +22,13 @@ export default class ErrorScene extends Phaser.Scene {
     this.enterInput = this.input.keyboard.on('keyup_ENTER', this.enter, this);
   }
   update() {
-    if (this.input.gamepad.total === 0 ) {
-      return;
+    if (this.input.gamepad.total > 0 ) {
+      this.gamepad = this.input.gamepad.getPad(0);
     }
-    this.gamepad = this.input.gamepad.getPad(0);
     if (this.startScene) {
-      this.gamepadInputs();
+      if (this.gamepad) {
+        this.gamepadInputs();
+      }
     }
   }
   keyboardInputs() {
