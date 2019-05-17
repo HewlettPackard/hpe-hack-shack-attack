@@ -18,6 +18,7 @@ export default class ErrorScene extends Phaser.Scene {
     this.countdown();
     this.createScene();
     this.createAnimations();
+    this.keyboardInputs();
     this.enterInput = this.input.keyboard.on('keyup_ENTER', this.enter, this);
   }
   update() {
@@ -28,6 +29,9 @@ export default class ErrorScene extends Phaser.Scene {
     if (this.startScene) {
       this.gamepadInputs();
     }
+  }
+  keyboardInputs() {
+    this.enterInput = this.input.keyboard.on('keyup_ENTER', this.enter, this);
   }
   gamepadInputs() {
     // A button

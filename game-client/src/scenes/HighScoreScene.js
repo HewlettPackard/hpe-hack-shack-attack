@@ -39,7 +39,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.countdown();
     this.createHighScoreMenu();
     this.createAnimations();
-    this.addInputs();
+    this.keyboardInputs();
     this.addEventListeners();
   }
   update(time) {
@@ -143,7 +143,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.events.on('updateName', this.updateName, this);
     this.events.on('submitUserData', this.submitUserData, this);
   }
-  addInputs() {
+  keyboardInputs() {
     this.leftInput = this.input.keyboard.on('keyup_LEFT', this.moveLeft, this);
     this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.moveRight, this);
     this.upInput = this.input.keyboard.on('keyup_UP', this.moveUp, this);

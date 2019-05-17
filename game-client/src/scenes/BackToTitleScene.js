@@ -20,9 +20,7 @@ export default class BackToTitleScene extends Phaser.Scene {
     this.countdown();
     this.createScene();
     this.createAnimations();
-    this.leftInput = this.input.keyboard.on('keyup_LEFT', this.onChange, this);
-    this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
-    this.select = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
+    this.keyboardInputs();
   }
   update() {
     if (this.input.gamepad.total === 0 ) {
@@ -45,6 +43,11 @@ export default class BackToTitleScene extends Phaser.Scene {
         }
       });
     }
+  }
+  keyboardInputs() {
+    this.leftInput = this.input.keyboard.on('keyup_LEFT', this.onChange, this);
+    this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
+    this.enterInput = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
   }
   gamepadInputs() {
     // A button

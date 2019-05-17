@@ -15,6 +15,7 @@ export default class ThankYouScene extends Phaser.Scene {
     this.createThankYou();
     this.createAnimations();
     this.countdown();
+    this.keyboardInputs();
   }
   update() {
     if (this.input.gamepad.total === 0 ) {
@@ -45,6 +46,9 @@ export default class ThankYouScene extends Phaser.Scene {
     
     this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
+  }
+  keyboardInputs() {
+    this.enterInput = this.input.keyboard.on('keyup_ENTER', this.enter, this);
   }
   gamepadInputs() {
     if (this.gamepad.A && this.buttonPressed === false) {

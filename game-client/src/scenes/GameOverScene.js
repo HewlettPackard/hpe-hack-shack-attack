@@ -19,10 +19,7 @@ export default class GameOverScene extends Phaser.Scene {
 
   create() {
     this.countdown();
-    // keyboard inputs
-    this.input.keyboard.on('keyup_LEFT', this.onChange, this);
-    this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
-    this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
+    this.keyboardInputs();
 
     this.gameOverText  = this.add.bitmapText(this.width / 2, this.height / 2 - 250, 'arcadeFont', 'GAME OVER', 80).setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
@@ -60,6 +57,11 @@ export default class GameOverScene extends Phaser.Scene {
     if (this.startScene) {
       this.gamepadInputs();
     }
+  }
+  keyboardInputs() {
+    this.leftInput = this.input.keyboard.on('keyup_LEFT', this.onChange, this);
+    this.rightInput = this.input.keyboard.on('keyup_RIGHT', this.onChange, this);
+    this.enterInput = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
   }
   countdown() {
     if (!this.startScene) {

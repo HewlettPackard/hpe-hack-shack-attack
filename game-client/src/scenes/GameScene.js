@@ -128,8 +128,8 @@ export default class GameScene extends Phaser.Scene {
     if (this.startRound) {
       this.player.update(this.moveKeys, this.gamepad);
       this.fireBullets(time, this.fireKeys, this.gamepad);
-      //this.spawnitBug(time);
-      //this.spawnitMonster(time);
+      this.spawnitBug(time);
+      this.spawnitMonster(time);
 
       Phaser.Utils.Array.Each(
         this.itBugs.getChildren(),

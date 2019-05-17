@@ -40,6 +40,7 @@ export default class TitleScene extends Phaser.Scene {
     this.attractButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Attract').setTint(0xFFFFFF).setInteractive();
     this.centerObject(this.attractButton, 1.08, -1.58);
 
+    this.keyboardInputs();
   }
   update (time) {
     if (this.input.gamepad.total === 0 ) {
@@ -49,6 +50,11 @@ export default class TitleScene extends Phaser.Scene {
     if (this.startScene) {
       this.gamepadInputs();
     }
+  }
+  keyboardInputs() {
+    this.upInput = this.input.keyboard.on('keyup_UP', this.onChange, this);
+    this.downInput = this.input.keyboard.on('keyup_DOWN', this.onChange, this);
+    this.enterInput = this.input.keyboard.on('keyup_ENTER', this.onSelect, this);
   }
   countdown() {
     if (!this.startScene) {
