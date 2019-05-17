@@ -134,10 +134,81 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('monsterDeath', monsterDeath, { frameWidth: 64, frameHeight: 64 });
   }
+  create() {
+    // animations
+
+    // enemy specific animations
+    this.anims.create({
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('monsterDeath', { start: 0, end: 5 }),
+      frameRate: 30,
+      repeat: 0,
+    });
+    this.anims.create({
+      key: 'bounce',
+      frames: this.anims.generateFrameNumbers('itBug', { start: 0, end: 6 }),
+      frameRate: 15,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('itMonster', { start: 0, end: 7 }),
+      frameRate: 20,
+      repeat: -1,
+    });
+    // player specific animations
+    this.anims.create({
+      key: 'up',
+      frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'down',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+      repeat: -1,
+      frameRate: 10
+    });
+    // highscore scene specific animations
+    this.anims.create({
+      key: 'blink',
+      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat: -1,
+      delay: 5000,
+      repeatDelay: 6000
+    });
+    this.anims.create({
+      key: 'closeMouth',
+      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
+      frameRate: 30,
+      delay: 500,
+      repeat: 0
+    });
+    // gameover scene specific animations
+    this.anims.create({
+      key: 'dizzy',
+      frames: this.anims.generateFrameNumbers('dizzyAnim', { start: 0, end: 13 }),
+      frameRate: 10,
+      repeat: -1
+    });
+  }
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('Game');
+      this.scene.start('HighScore');
     }
   }
 }

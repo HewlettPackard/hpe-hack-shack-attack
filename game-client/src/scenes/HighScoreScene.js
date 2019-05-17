@@ -135,23 +135,7 @@ export default class HighScoreScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
       duration: 350
     });
-
-    this.blinkAnimation = this.anims.create({
-      key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
-      frameRate: 8,
-      repeat: -1,
-      delay: 3000,
-      repeatDelay: 4000
-    });
-    
-    this.closeMouthAnimation = this.anims.create({
-      key: 'closeMouth',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
-      frameRate: 30,
-      repeat: 0
-    });
-    this.eyes.play('blink');
+    this.eyes.play('blink')
     this.background.anims.playReverse('closeMouth');
   }
   addEventListeners() {

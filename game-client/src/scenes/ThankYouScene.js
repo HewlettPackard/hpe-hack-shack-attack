@@ -43,22 +43,6 @@ export default class ThankYouScene extends Phaser.Scene {
       duration: 1200,
     });
     
-    this.blinkAnimation = this.anims.create({
-      key: 'blink',
-      frames: this.anims.generateFrameNumbers('highscoreEyes', { start: 0, end: 2 }),
-      frameRate: 8,
-      repeat: -1,
-      delay: 5000,
-      repeatDelay: 6000
-    });
-    
-    this.closeMouthAnimation = this.anims.create({
-      key: 'closeMouth',
-      frames: this.anims.generateFrameNumbers('highscoreBG', { start: 3, end: 7 }),
-      frameRate: 30,
-      delay: 500,
-      repeat: 0
-    });
     this.eyes.play('blink');
     this.background.anims.playReverse('closeMouth');
   }

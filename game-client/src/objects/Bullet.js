@@ -26,19 +26,19 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     switch (direction) {
       case 'up':
-        this.setPosition(x + 10, y);
+        this.setPosition(x, y);
         this.setVelocityY(-550);
         break;
       case 'down':
-        this.setPosition(x - 10, y);
+        this.setPosition(x, y);
         this.setVelocityY(550);
         break;
       case 'left':
-        this.setPosition(x, y - 10);
+        this.setPosition(x, y);
         this.setVelocityX(-550);
         break;
       case 'right':
-        this.setPosition(x, y + 10);
+        this.setPosition(x, y);
         this.setVelocityX(550);
         break;
     }

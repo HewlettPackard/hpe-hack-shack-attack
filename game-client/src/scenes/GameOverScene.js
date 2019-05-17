@@ -45,12 +45,6 @@ export default class GameOverScene extends Phaser.Scene {
     this.cancelButton = this.add.bitmapText(this.width / 2, this.height / 2, 'arcadeFont', 'Cancel').setTint(0xFFFFFF).setInteractive()
     
     // sprites
-     this.dizzyAnimation = this.anims.create({
-      key: 'dizzy',
-      frames: this.anims.generateFrameNumbers('dizzyAnim', { start: 0, end: 13 }),
-      frameRate: 10,
-      repeat: -1
-    });
 
     this.devGameOver = this.add.sprite(this.width / 2, this.height - 120, 'devGameOver')
       .setScale(3);
