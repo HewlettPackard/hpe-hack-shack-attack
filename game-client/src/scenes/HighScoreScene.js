@@ -28,7 +28,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.initials = '';
     this.name = '';
     this.initLimit = 3;
-    this.nameLimit = 30;
+    this.nameLimit = 45;
     
     this.initialText;
     this.nameText;
@@ -107,24 +107,26 @@ export default class HighScoreScene extends Phaser.Scene {
     this.events.removeListener('submitUserData');
   }
   createHighScoreMenu() {
-    this.text = this.add.bitmapText(this.width / 2 - 250, this.height / 2 - 80, 'arcadeFont', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-', 55)
+    this.text = this.add.bitmapText(this.width / 2 - 400, this.height / 2 - 100, 'arcadeFont', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-', 70)
     .setOrigin(0.5, 0.5)
-    .setLetterSpacing(30)
+    .setLetterSpacing(40)
     .setInteractive();
     
-    this.add.image(this.text.x + 600, this.text.y + 110, 'rub').setScale(2);
-    this.add.image(this.text.x + 705, this.text.y + 110, 'end').setScale(2);
+    this.add.image(this.text.x + 945, this.text.y + 130, 'rub').setScale(3.2);
+    this.add.image(this.text.x + 1100, this.text.y + 130, 'end').setScale(3.2);
     
     this.block = this.add.graphics()
     .fillStyle(0xFFFFFF, 1)
-    .fillRect(this.text.x / 2 - 80, this.text.y / 2 + 80, 80, 12);
-    this.add.bitmapText(100, 490, 'arcadeFont', 'INITIALS', 35).setTint(0xFF1FDC83);
-    this.add.bitmapText(100, 590, 'arcadeFont', 'NAME', 35).setTint(0xFF1FDC83);
+    .fillRect(this.text.x / 2 - 80, this.text.y / 2 + 125, 85, 12);
+
+    this.add.bitmapText(100, 670, 'arcadeFont', 'INITIALS', 40).setTint(0xFF1FDC83);
+    this.add.bitmapText(100, 770, 'arcadeFont', 'NAME', 40).setTint(0xFF1FDC83);
     
-    this.initialText = this.add.bitmapText(100, 530, 'arcadeFont', '', 30).setTint(0xFFFFFF);
-    this.nameText = this.add.bitmapText(100, 630, 'arcadeFont', '', 30).setTint(0xFFFFFF);
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
-    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
+    this.initialText = this.add.bitmapText(100, 720, 'arcadeFont', '', 35).setTint(0xFFFFFF);
+    this.nameText = this.add.bitmapText(100, 820, 'arcadeFont', '', 35).setTint(0xFFFFFF);
+
+    this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2 - 110, 'highscoreEyes').setScale(9);
   }
   createAnimations() {
     this.tweens.add({
@@ -154,37 +156,37 @@ export default class HighScoreScene extends Phaser.Scene {
   moveLeft() {
     if (this.cursor.x > 0) {
       this.cursor.x--;
-      this.block.x -= 106;
+      this.block.x -= 157.2;
     } else {
       this.cursor.x = 9;
-      this.block.x += 106 * 9;
+      this.block.x += 157.2 * 9;
     }
   }
   moveRight() {
     if (this.cursor.x < 9) {
       this.cursor.x++;
-      this.block.x += 106;
+      this.block.x += 157.2;
     } else {
       this.cursor.x = 0;
-      this.block.x -= 106 * 9;
+      this.block.x -= 157.2 * 9;
     }
   }
   moveUp() {
     if (this.cursor.y > 0) {
       this.cursor.y--;
-      this.block.y -= 110;
+      this.block.y -= 139;
     } else {
       this.cursor.y = 2;
-      this.block.y += 110 * 2;
+      this.block.y += 139 * 2;
     }
   }
   moveDown() {
     if (this.cursor.y < 2) {
       this.cursor.y++;
-      this.block.y += 110;
+      this.block.y += 139;
     } else {
       this.cursor.y = 0;
-      this.block.y -= 110 * 2;
+      this.block.y -= 139 * 2;
     }
   }
   updateInitials (initials) {
