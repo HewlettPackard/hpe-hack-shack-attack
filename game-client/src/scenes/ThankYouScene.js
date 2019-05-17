@@ -28,16 +28,17 @@ export default class ThankYouScene extends Phaser.Scene {
     }
   }
   createThankYou() {
-    this.add.bitmapText(this.width / 2 + 10, this.height / 2 - 50, 'arcadeFont', 'THANKS FOR PLAYING!', 65).setTint(0xFFFFFF).setOrigin(0.5, 0.5)
+    this.add.bitmapText(this.width / 2 + 10, this.height / 2 - 150, 'arcadeFont', 'THANKS FOR PLAYING!', 75).setTint(0xFFFFFF).setOrigin(0.5, 0.5)
 
-    this.startText = this.add.bitmapText(this.width / 2, this.height - 350, 'arcadeFont', 'Press A or Enter to start over', 20).setTint(0xFFFFFFFF).setOrigin(0.5, 0.5);
+    this.acceptText = this.add.bitmapText(this.width / 2 - 490, this.height / 2 - 20, 'arcadeFont', 'Press A or Enter to continue', 35)
+      .setTint(0xFFFFFF)
 
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
-    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
+    this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2 - 110, 'highscoreEyes').setScale(9);
   }
   createAnimations() {
-    this.startTextFade = this.tweens.add({
-      targets: this.startText,
+    this.acceptTextFade = this.tweens.add({
+      targets: this.acceptText,
       alpha: 0,
       yoyo: true,
       repeat: -1,

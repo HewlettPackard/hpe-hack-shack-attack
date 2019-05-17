@@ -18,27 +18,27 @@ export default class TitleScene extends Phaser.Scene {
 
     // logo
     this.gameLogo = this.add.sprite(0, 0, 'gameLogo')
-      .setScale(0.8)
+      .setScale(1.2)
     this.centerObject(this.gameLogo, 0, 1.2);
     this.hpeDevLogo = this.add.sprite(0, 0, 'hpeDevLogo')
-      .setScale(0.5)
-    this.centerObject(this.hpeDevLogo, -4, 3);
+      .setScale(1)
+    this.centerObject(this.hpeDevLogo, -5.5, 3.9);
     // start select box
     this.startSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(0, 0, 320, 50);
-    this.centerObject(this.startSelectionBox, 1.6, -1);
+      .fillRoundedRect(0, 0, 380, 80);
+    this.centerObject(this.startSelectionBox, 2, -1.95);
     // attract select box
     this.attractSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(0, 0, 320, 50)
+      .fillRoundedRect(0, 0, 450, 80)
     this.attractSelectionBox.visible = false;
-    this.centerObject(this.attractSelectionBox, 1.6, -1.5);
+    this.centerObject(this.attractSelectionBox, 2.3, -2.75);
     // play and attract buttons
-    this.startButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Start').setTint(0x000000).setInteractive();
-    this.centerObject(this.startButton, 0.76, -1.08);
-    this.attractButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Attract').setTint(0xFFFFFF).setInteractive();
-    this.centerObject(this.attractButton, 1.08, -1.58);
+    this.startButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Start', 60).setTint(0x000000).setInteractive();
+    this.centerObject(this.startButton, 1.5, -2);
+    this.attractButton = this.add.bitmapText(0, 0, 'arcadeFont', 'Attract', 60).setTint(0xFFFFFF).setInteractive();
+    this.centerObject(this.attractButton, 2.1, -2.8);
 
     this.keyboardInputs();
   }

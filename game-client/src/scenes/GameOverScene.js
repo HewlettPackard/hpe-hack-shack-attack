@@ -21,32 +21,31 @@ export default class GameOverScene extends Phaser.Scene {
     this.countdown();
     this.keyboardInputs();
 
-    this.gameOverText  = this.add.bitmapText(this.width / 2, this.height / 2 - 250, 'arcadeFont', 'GAME OVER', 80).setTint(0xFFFFFF)
+    this.gameOverText  = this.add.bitmapText(this.width / 2, this.height / 2 - 350, 'arcadeFont', 'GAME OVER', 120).setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
-    this.scoreText  = this.add.bitmapText(this.width / 2, this.height / 2 - 160, 'arcadeFont', `You got ${this.score}pts!`, 60).setTint(0xFFFFFF)
+    this.scoreText  = this.add.bitmapText(this.width / 2 + 50, this.height / 2 - 200, 'arcadeFont', `You got ${this.score}pts!`, 70).setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
 
     // submit select box
     this.submitSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 3 - 17, this.height / 2 - 10, 220, 50)
+      .fillRoundedRect(this.width / 3 - 110, this.height / 2 - 5, 400, 80)
 
     // cancel select box
     this.cancelSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 17, this.height / 2 - 10, 220, 50)
+      .fillRoundedRect(this.width / 2 + 2, this.height / 2 - 5, 400, 80)
     this.cancelSelectionBox.visible = false;
 
     // submit and cancel buttons
-    this.submitButton = this.add.bitmapText(this.width / 3, this.height / 2, 'arcadeFont', 'Submit').setTint(0x000000).setInteractive()
-    this.cancelButton = this.add.bitmapText(this.width / 2, this.height / 2, 'arcadeFont', 'Cancel').setTint(0xFFFFFF).setInteractive()
+    this.submitButton = this.add.bitmapText(this.width / 3 - 85, this.height / 2, 'arcadeFont', 'Submit', 60).setTint(0x000000).setInteractive()
+    this.cancelButton = this.add.bitmapText(this.width / 2 + 25, this.height / 2, 'arcadeFont', 'Cancel', 60).setTint(0xFFFFFF).setInteractive()
     
     // sprites
-
-    this.devGameOver = this.add.sprite(this.width / 2, this.height - 120, 'devGameOver')
-      .setScale(3);
-    this.dizzy = this.add.sprite(this.width / 2 + 10, this.height - 180, 'dizzyAnim')
-    .setScale(4)
+    this.devGameOver = this.add.sprite(this.width / 2, this.height - 140, 'devGameOver')
+      .setScale(4);
+    this.dizzy = this.add.sprite(this.width / 2 + 15, this.height - 180, 'dizzyAnim')
+    .setScale(6)
     .play('dizzy');
   }
   update(time) {

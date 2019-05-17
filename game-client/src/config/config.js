@@ -1,8 +1,8 @@
 export const config = {
   type: Phaser.AUTO,
   parent: "phaser-game",
-  width: 1336,
-  height: 768,
+  width: 1920,
+  height: 1080,
   input: {
     gamepad: true,
     queue: true
