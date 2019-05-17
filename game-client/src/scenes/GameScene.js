@@ -23,7 +23,7 @@ export default class GameScene extends Phaser.Scene {
     this.startRound = false;
   }
   create() {
-    this.map = this.add.sprite(this.width / 2, this.height / 2, 'map');
+    this.map = this.add.sprite(this.width / 2, this.height / 2, 'map').setScale(1.2);
 
     this.fireKeys = this.input.keyboard.createCursorKeys();
     this.moveKeys = this.input.keyboard.addKeys({
@@ -33,7 +33,7 @@ export default class GameScene extends Phaser.Scene {
       'right': Phaser.Input.Keyboard.KeyCodes.D
     });
 
-    this.startText = this.add.bitmapText(this.width / 2, this.height / 2 - 200, 'arcadeFont', '', 75)
+    this.startText = this.add.bitmapText(this.width / 2, this.height / 2 - 200, 'arcadeFont', '', 100)
     .setTint(0xFFFFFF)
     .setOrigin(0.5, 0.5);
 
@@ -44,14 +44,14 @@ export default class GameScene extends Phaser.Scene {
     this.createPlayer();
     this.addCollisions();
     this.setupEvents();
-    this.physics.world.setBounds(0, 120, this.width, this.height - 100);
-    this.playerAvatar = this.add.sprite(1115, 32, 'playerAvatar')
-      .setScale(0.5)
+    this.physics.world.setBounds(0, 200, this.width, this.height - 200);
+    this.playerAvatar = this.add.sprite(this.width - 345, 35, 'playerAvatar')
+      .setScale(0.8)
       .setDepth(1);
-    this.scoreText = this.add.bitmapText(20, 20, 'arcadeFont', 'Score:0', 25)
+    this.scoreText = this.add.bitmapText(50, 20, 'arcadeFont', 'Score:0', 35)
       .setTint(0xFFFFFF)
       .setDepth(1);
-    this.livesText = this.add.bitmapText(1140, 20, 'arcadeFont', `Lives:${this.player.lives}`, 25)
+    this.livesText = this.add.bitmapText(this.width - 300, 20, 'arcadeFont', `Lives:${this.player.lives}`, 35)
       .setTint(0xFFFFFF)
       .setDepth(1);
 
@@ -68,13 +68,13 @@ export default class GameScene extends Phaser.Scene {
     })
   }
   createWallsandBorders() {
-    this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -180)
+    this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -120)
     this.physics.add.existing(this.doorLeft);
     this.doorLeft.body
       .setSize(10, 600)
       .setImmovable(true);
 
-    this.doorRight = this.physics.add.sprite(this.width / 2 + 60 , -180)
+    this.doorRight = this.physics.add.sprite(this.width / 2 + 70 , -120)
     this.physics.add.existing(this.doorRight);
     this.doorRight.body
       .setSize(10, 600)
@@ -82,19 +82,18 @@ export default class GameScene extends Phaser.Scene {
 
     this.borderDark = this.add.graphics()
       .fillStyle(0x11141A, 0.8)
-      .fillRect(0, this.height / 2 - 265, 50, this.height - 169)
-      .fillRect(this.width - 50, this.height / 2 - 265, 50, this.height - 169)
-      .fillRect(this.width / 2 - 82, 0, 150, 50)
+      .fillRect(0, this.height / 2 - 345, 50, this.height - 245)
+      .fillRect(this.width - 50, this.height / 2 - 345, 50, this.height - 245)
+      .fillRect(this.width / 2 - 75, 0, 150, 100)
       .fillRect(0, this.height - 50, this.width, 50)
       .setDepth(2);
-
     this.borderLight = this.add.graphics()
-      .fillStyle(0x11141A, 0.5)
-      .fillRect(0, this.height / 2 - 265, 75, this.height - 194)
-      .fillRect(this.width - 75, this.height / 2 - 265, 75, this.height - 194)
-      .fillRect(this.width / 2 - 82, 0, 150, 75)
+      .fillStyle(0x11141A, 0.8)
+      .fillRect(0, this.height / 2 - 345, 75, this.height - 245)
+      .fillRect(this.width - 75, this.height / 2 - 345, 75, this.height - 245)
+      .fillRect(this.width / 2 - 75, 0, 150, 125)
       .fillRect(0, this.height - 75, this.width, 75)
-      .setDepth(1);
+      .setDepth(2);
   }
   createGroups() {
     this.itBugs = this.physics.add.group({ classType: ItBug });
@@ -118,7 +117,8 @@ export default class GameScene extends Phaser.Scene {
   createPlayer() {
     this.player = new Player(this, this.width / 2 - 5, this.height / 2);
     this.player.setCollideWorldBounds(true)
-      .setSize(70, 95, true);
+      .setSize(60, 80, true)
+      .setOffset(15, 18);
   }
   update(time) {
     if (this.input.gamepad.total > 0 ) {
@@ -131,8 +131,8 @@ export default class GameScene extends Phaser.Scene {
       } else {
         this.fireBulletsKeyboard(time, this.fireKeys);
       }
-      this.spawnitBug(time);
-      this.spawnitMonster(time);
+     this.spawnitBug(time);
+     this.spawnitMonster(time);
 
       Phaser.Utils.Array.Each(
         this.itBugs.getChildren(),
@@ -216,7 +216,7 @@ export default class GameScene extends Phaser.Scene {
         itBug.setActive(true)
           .setVisible(true)
           .setScale(0.6)
-          .setCircle(34, 15, 50)
+          .setCircle(30, 18, 50)
           .spawn(coords.x, coords.y);
         let newTime = Phaser.Math.Between(500, 800);
         this.spawnTimerBug = time + newTime;
@@ -233,7 +233,7 @@ export default class GameScene extends Phaser.Scene {
       if (itMonster) {
         itMonster.setActive(true)
           .setVisible(true)
-          .setSize(80, 90)
+          .setSize(75, 80)
           .spawn(this.width / 2, - 80);
         let newTime = Phaser.Math.Between(1500, 2500);
         this.spawnTimerMonster = time + newTime;
@@ -246,16 +246,16 @@ export default class GameScene extends Phaser.Scene {
     let y;
     switch(this.spawnSide[index]){
       case('left'):
-        x = Phaser.Math.Between(-65, -80);
+        x = Phaser.Math.Between(-100, -120);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('right'):
-        x = Phaser.Math.Between(this.width + 65, this.width + 80);
+        x = Phaser.Math.Between(this.width + 100, this.width + 120);
         y = Phaser.Math.Between(100, this.height);
         return { x, y };
       case('bottom'):
         x = Phaser.Math.Between(0, this.width);
-        y = Phaser.Math.Between(this.height + 65, this.height + 80);
+        y = Phaser.Math.Between(this.height + 100, this.height + 120);
         return { x, y };
     }
   }
