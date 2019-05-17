@@ -74,18 +74,20 @@ export default class BackToTitleScene extends Phaser.Scene {
   createScene() {
     this.submitSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 230, this.height / 2 + 95, 200, 65);
-    this.submitSelectionBox.visible = false;
+      .fillRoundedRect(this.width / 3 - 32, this.height / 2 + 35, 320, 80)
     this.cancelSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 + 50, this.height / 2 + 95, 200, 65);
-    this.message1 = this.add.bitmapText(this.width / 2 - 420, this.height / 2 - 120, 'arcadeFont', 'Cancel submitting', 50);
-    this.message2 = this.add.bitmapText(this.width / 2 - 260, this.height / 2 - 40, 'arcadeFont', 'your score?', 50);
-    this.submitButton = this.add.bitmapText(this.width / 2 - 200, this.height / 2 + 100, 'arcadeFont', 'Yes', 45).setTint(0xFFFFFF);
-    this.cancelButton = this.add.bitmapText(this.width / 2 + 100, this.height / 2 + 100, 'arcadeFont', 'No', 45).setTint(0x000000);
+      .fillRoundedRect(this.width / 2 - 23, this.height / 2 + 35, 320, 80)
+    this.cancelSelectionBox.visible = false;
 
-    this.background = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreBG').setScale(8);
-    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2, 'highscoreEyes').setScale(8);
+    this.submitButton = this.add.bitmapText(this.width / 3 , this.height / 2 + 50, 'arcadeFont', 'Submit', 45).setTint(0x000000).setInteractive()
+    this.cancelButton = this.add.bitmapText(this.width / 2 , this.height / 2 + 50, 'arcadeFont', 'Cancel', 45).setTint(0xFFFFFF).setInteractive()
+
+    this.message1 = this.add.bitmapText(this.width / 2 - 520, this.height / 2 - 180, 'arcadeFont', 'Cancel submitting', 60);
+    this.message2 = this.add.bitmapText(this.width / 2 - 360, this.height / 2 - 100, 'arcadeFont', 'your score?', 60);
+
+    this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
+    this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2 - 110, 'highscoreEyes').setScale(9);
   }
   createAnimations() {
     this.eyes.play('blink');
