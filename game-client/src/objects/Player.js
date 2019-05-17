@@ -67,13 +67,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       if (x > 0) {
         this.play('right', true);
       }
-    } else {
+    } else if (Math.abs(y) > Math.abs(x)) {
       if (y > 0) {
         this.play('down', true);
       }
       if (y < 0) {
         this.play('up', true);
       }
+    } else {
+      this.anims.stop();
     }
   }
   onMove(moveKeys, gamepad) {
@@ -88,17 +90,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     if (moveKeys.up.isDown) {
       this.setVelocityY(-350);
-      this.play('up');
+      this.play('up', true);
     } else if (moveKeys.down.isDown) {
       this.setVelocityY(350);
-      this.play('down');
+      this.play('down', true);
     }
     if (moveKeys.left.isDown) {
       this.setVelocityX(-350);
-      this.play('left');
+      this.play('left', true);
     } else if (moveKeys.right.isDown) {
       this.setVelocityX(350);
-      this.play('right');
+      this.play('right', true);
     }
   }
 

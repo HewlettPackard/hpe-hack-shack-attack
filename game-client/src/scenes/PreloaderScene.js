@@ -194,7 +194,7 @@ export default class PreloaderScene extends Phaser.Scene {
       key: 'closeMouth',
       frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
       frameRate: 30,
-      delay: 500,
+      delay: 200,
       repeat: 0
     });
     // gameover scene specific animations
@@ -208,7 +208,7 @@ export default class PreloaderScene extends Phaser.Scene {
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('HighScore');
+      this.scene.start('Title');
     }
   }
 }
