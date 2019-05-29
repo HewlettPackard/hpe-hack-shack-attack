@@ -3,6 +3,7 @@ import ItBug from '../objects/ItBug';
 import ItMonster from '../objects/ItMonster';
 import Player from '../objects/Player';
 import Bullet from '../objects/Bullet';
+import PowerUp from '../objects/PowerUp';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -10,15 +11,17 @@ export default class GameScene extends Phaser.Scene {
   }
   init() {
     this.gamepad;
+    this.height = this.game.config.height;
+    this.width = this.game.config.width;
     this.spawnTimerBug = 0;
     this.spawnTimerMonster = 0;
     this.bulletTimer = 0;
     this.collisionDamage = 1
     this.spawnSide = ['left', 'right', 'bottom'];
-
-    this.height = this.game.config.height;
-    this.width = this.game.config.width;
-
+    this.powerUpTimer = 0;
+    this.powerUpCount = 0;
+    this.dead = false;
+    this.disableFire = false;
     this.score = 0;
     this.startRound = false;
 
@@ -63,12 +66,44 @@ export default class GameScene extends Phaser.Scene {
     this.events.on('gameover', () => {
       this.events.removeListener('gameover');
       this.events.removeListener('updateScore');
-      this.scene.start('GameOver', { score: this.score })
-    })
-    this.events.on('updateScore', () => {
-      this.score++;
+      this.events.removeListener('gotPowerUp');
+      this.cameras.main.fade(2000);
+      this.dead = true;
+      this.cameras.main.on('camerafadeoutcomplete', () => {
+        this.scene.start('GameOver', { score: this.score })
+      });
+    });
+    this.events.on('updateScore', (points) => {
+      this.score += points;
       this.scoreText.setText(`Score:${this.score}`);
-    })
+    });
+    this.events.on('gotPowerUp', () => {
+      this.powerUpCount = 0;
+      this.disableFire = true;
+
+      this.powerUpCollect = this.add.sprite(this.player.x, this.player.y, 'powerUpCollect')
+      .setScale(0.6)
+      .play('powerUpCollect');
+
+      this.player.disableBody();
+      this.player.setActive(false);
+      this.player.setVisible(false);
+
+      this.itMonsters.getChildren().map((child) => {
+        child.kill();
+      });
+      this.itBugs.getChildren().map((child) => {
+        child.kill();
+      });
+
+      this.powerUpCollect.on('animationcomplete', () => {
+        this.disableFire = false;
+
+        this.player.enableBody();
+        this.player.setActive(true);
+        this.player.setVisible(true);
+      });
+    });
   }
   createWallsandBorders() {
     this.doorLeft = this.physics.add.sprite(this.width / 2 - 70 , -120)
@@ -102,6 +137,7 @@ export default class GameScene extends Phaser.Scene {
     this.itBugs = this.physics.add.group({ classType: ItBug });
     this.itMonsters = this.physics.add.group({ classType: ItMonster });
     this.bullets = this.physics.add.group({ classType: Bullet , runChildUpdate: true });
+    this.powerUps = this.physics.add.group({ classType: PowerUp });
   }
   addCollisions() {
     this.physics.add.collider(this.itBugs, this.itBugs);
@@ -116,12 +152,14 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.player, this.itMonsters, () => this.player.onHit(this.collisionDamage, this.livesText), this.checkEnemyCollision, this);
     this.physics.add.overlap(this.itMonsters, this.bullets, this.bulletCollision, this.checkBulletCollision, this);
+
+    this.physics.add.overlap(this.player, this.powerUps, this.powerUpCollision, this.checkEnemyCollision, this);
   }
   createPlayer() {
     this.player = new Player(this, this.width / 2 - 5, this.height / 2);
     this.player.setCollideWorldBounds(true)
       .setSize(60, 80, true)
-      .setOffset(15, 18);
+      .setOffset(10, 18);
   }
   update(time) {
     if (this.input.gamepad.total > 0 ) {
@@ -130,12 +168,17 @@ export default class GameScene extends Phaser.Scene {
     if (this.startRound) {
       this.player.update(this.moveKeys, this.gamepad);
       if (this.gamepad) {
-        this.fireBulletsGamepad(time, this.gamepad);
+        if (!this.dead && !this.disableFire) {
+          this.fireBulletsGamepad(time, this.gamepad);
+        } else {
+          this.bulletTimer = time;
+        }
       } else {
         this.fireBulletsKeyboard(time, this.fireKeys);
       }
-     this.spawnitBug(time);
-     this.spawnitMonster(time);
+      this.spawnitBug(time);
+      this.spawnitMonster(time);
+      this.addPowerUp(time);
 
       Phaser.Utils.Array.Each(
         this.itBugs.getChildren(),
@@ -152,6 +195,8 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.spawnTimerBug = time;
       this.bulletTimer = time;
+      this.powerUpTimer = time + 15000;
+      this.spawnTimerMonster = time + 2500;
     }
   }
   countdown() {
@@ -183,10 +228,10 @@ export default class GameScene extends Phaser.Scene {
         }
         if (bullet) {
           bullet.onFireGamepad(this.player.x, this.player.y, gamepad);
-          this.bulletTimer += 250;
+          this.bulletTimer += 200;
         }
       } else {
-        this.bulletTimer += 250;
+        this.bulletTimer += 200;
       }     
     }
   }
@@ -200,10 +245,10 @@ export default class GameScene extends Phaser.Scene {
         }
         if (bullet) {
           bullet.onFireKeyboard(this.player.x, this.player.y, key);
-          this.bulletTimer += 250;
+          this.bulletTimer += 200;
         }
       } else {
-        this.bulletTimer += 250;
+        this.bulletTimer += 200;
       }     
     }
   }
@@ -219,11 +264,38 @@ export default class GameScene extends Phaser.Scene {
         itBug.setActive(true)
           .setVisible(true)
           .setScale(0.6)
+          .enableBody()
           .setCircle(30, 18, 50)
           .spawn(coords.x, coords.y);
-        let newTime = Phaser.Math.Between(500, 800);
+        let newTime = Phaser.Math.Between(600, 1000);
         this.spawnTimerBug = time + newTime;
       }
+    }
+  }
+  addPowerUp(time) {
+    if (this.powerUpCount === 0) {
+      if (time > this.powerUpTimer) {
+        let powerUp = this.powerUps.getFirstDead(false);
+        if (!powerUp) {
+          powerUp = new PowerUp(this, 0, 0);
+          this.powerUps.add(powerUp);
+        }
+        if (powerUp) {
+          this.powerUpCount = 1;
+          let x = Phaser.Math.Between(100, this.width - 100);
+          let y = Phaser.Math.Between(250, this.height - 100);
+          powerUp.setActive(true)
+            .setVisible(true)
+            .enableBody()
+            .setScale(0.7)
+            .setSize(75, 75, true)
+            .setOffset(10, 15)
+            .spawn(x, y);
+          this.powerUpTimer += 35000;
+        }
+      }
+    } else {
+      this.powerUpTimer = time + 35000;
     }
   }
   spawnitMonster(time) {
@@ -237,8 +309,9 @@ export default class GameScene extends Phaser.Scene {
         itMonster.setActive(true)
           .setVisible(true)
           .setSize(75, 80)
-          .spawn(this.width / 2, - 80);
-        let newTime = Phaser.Math.Between(1500, 2500);
+          .enableBody()
+          .spawn(this.width / 2, - 100);
+        let newTime = Phaser.Math.Between(1800, 2800);
         this.spawnTimerMonster = time + newTime;
       }
     }
@@ -271,5 +344,8 @@ export default class GameScene extends Phaser.Scene {
   bulletCollision(enemy, bullet) {
     enemy.onHit(1);
     bullet.onHit();
+  }
+  powerUpCollision(player, powerUp) {
+    powerUp.onHit(player, this.gamepad);
   }
 }

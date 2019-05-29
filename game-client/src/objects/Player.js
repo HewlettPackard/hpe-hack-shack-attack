@@ -8,7 +8,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.lives = 3;
     this.immune = false;
 
-    this.setScale(0.5);
+    this.setScale(0.6);
 
     this.playerFlicker = this.scene.tweens.add({
       targets: this,
@@ -32,7 +32,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.body.velocity.x === 0 && this.body.velocity.y === 0) {
       this.anims.stop();
     }
-    this.constrainVelocity(this, 350);
+    this.constrainVelocity(this, 400);
     this.animateInvincibility();
   }
   animateInvincibility() {
@@ -60,24 +60,33 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.lives <= 0) {
       livesText.setText(`Lives:0`);
       this.disableBody();
-      this.scene.cameras.main.fade(2000);
-      this.scene.cameras.main.on('camerafadeoutcomplete', () => this.scene.events.emit('gameover'));
+      this.scene.events.emit('gameover');
     }
   }
-  handleAnimation(x, y) {
-    if (Math.abs(x) > Math.abs(y)) {
-      if (x < 0 ) {
-        this.play('left', true);
-      }
-      if (x > 0) {
-        this.play('right', true);
-      }
-    } else if (Math.abs(y) > Math.abs(x)) {
-      if (y > 0) {
-        this.play('down', true);
-      }
-      if (y < 0) {
-        this.play('up', true);
+  handleAnimation(x, y, gamepad) {
+    if (gamepad.A) {
+      this.play('playerDown', true);
+    } else if (gamepad.B) {
+      this.play('playerRight', true);
+    } else if (gamepad.buttons[3].pressed) {
+      this.play('playerLeft', true);
+    } else if (gamepad.buttons[4].pressed) {
+      this.play('playerUp', true);
+    } else {
+      if (Math.abs(x) > Math.abs(y)) {
+        if (x < 0 ) {
+          this.play('playerLeft', true);
+        }
+        if (x > 0) {
+          this.play('playerRight', true);
+        }
+      } else if (Math.abs(y) > Math.abs(x)) {
+        if (y > 0) {
+          this.play('playerDown', true);
+        }
+        if (y < 0) {
+          this.play('playerUp', true);
+        }
       }
     }
   }
@@ -86,26 +95,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (gamepad.axes.length) {
       let x = gamepad.axes[0].getValue();
       let y = gamepad.axes[1].getValue();
-      this.setVelocityX(350 * x);
-      this.setVelocityY(350 * y);
-      this.handleAnimation(x, y);
+      this.setVelocityX(400 * x);
+      this.setVelocityY(400 * y);
+      this.handleAnimation(x, y, gamepad);
     }
   }
 
   onMoveKeyboard(moveKeys) {
     this.setVelocity(0);
     if (moveKeys.up.isDown) {
-      this.setVelocityY(-350);
+      this.setVelocityY(-400);
       this.play('up', true);
     } else if (moveKeys.down.isDown) {
-      this.setVelocityY(350);
+      this.setVelocityY(400);
       this.play('down', true);
     }
     if (moveKeys.left.isDown) {
-      this.setVelocityX(-350);
+      this.setVelocityX(-400);
       this.play('left', true);
     } else if (moveKeys.right.isDown) {
-      this.setVelocityX(350);
+      this.setVelocityX(400);
       this.play('right', true);
     }
   }

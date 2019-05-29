@@ -12,6 +12,7 @@
     "babel-env": "^2.4.1",
     "babel-eslint": "^10.0.1",
     "babel-register": "^6.26.0",
+    "bad-words": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "eslint": "^5.16.0",
