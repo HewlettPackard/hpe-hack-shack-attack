@@ -241,7 +241,10 @@ export default class HighScoreScene extends Phaser.Scene {
         }
         if (res.status === 403) {
           this.resetScene();
-          this.scene.start('ProfanityError', { score: this.score });
+          this.background.play('closeMouth');
+          this.background.on('animationcomplete', (animation, frame) =>{
+            this.scene.start('ProfanityError', { score: this.score });
+          });
         }
       })
       .catch(err => {
