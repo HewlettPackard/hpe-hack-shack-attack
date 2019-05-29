@@ -16,18 +16,21 @@ import map from '../assets/sprites/playfield.png';
 // logos
 import gameLogo from '../assets/sprites/attack-marquee.png';
 import hpeDevLogo from '../assets/sprites/hpe-dev-logo.png';
-import hpeLogo from '../assets/sprites/dev-powerup.png';
 // sprites
 import playerAvatar from '../assets/sprites/player1-avatar.png';
 import player from '../assets/sprites/player1-dev.png';
+import devPowerUp from '../assets/sprites/dev-powerup.png';
 import bullet from '../assets/sprites/bullets-pellets.png';
 import itBug from '../assets/sprites/it-bug.png';
 import itMonster from '../assets/sprites/it-monster.png';
 import devGameOver from '../assets/sprites/dev-gameover.png';
 import dizzyAnim from '../assets/sprites/dizzyanim.png';
 import highscoreBG from '../assets/sprites/highscorebg.png';
-import monsterDeath from '../assets/sprites/monsterDeath.png';
+import itMonsterPoof from '../assets/sprites/it-monsterPoof.png';
+import bugDeath from '../assets/sprites/bugDeath.png';
+import explosion from '../assets/sprites/explosion.png';
 import highscoreEyes from '../assets/sprites/highscoreeyes.png';
+import powerUpCollect from '../assets/sprites/powerUpCollect.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -121,29 +124,38 @@ export default class PreloaderScene extends Phaser.Scene {
     
     this.load.image('gameLogo', gameLogo);
     this.load.image('hpeDevLogo', hpeDevLogo);
-    this.load.image('hpeLogo', hpeLogo);
 
     this.load.image('playerAvatar', playerAvatar);
     this.load.image('bullet', bullet);
     this.load.image('devGameOver', devGameOver);
-    this.load.spritesheet('player', player, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('player', player, { frameWidth: 80, frameHeight: 112 });
     this.load.spritesheet('itBug', itBug, { frameWidth: 96, frameHeight: 124 });
-    this.load.spritesheet('itMonster', itMonster, { frameWidth: 96, frameHeight: 124 });
+    this.load.spritesheet('itMonster', itMonster, { frameWidth: 100, frameHeight: 116 });
     this.load.spritesheet('highscoreBG', highscoreBG, { frameWidth: 167, frameHeight: 96 });
     this.load.spritesheet('highscoreEyes', highscoreEyes, { frameWidth: 167, frameHeight: 96 });
     this.load.spritesheet('dizzyAnim', dizzyAnim, { frameWidth: 96, frameHeight: 124 });
-    this.load.spritesheet('monsterDeath', monsterDeath, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('itMonsterPoof', itMonsterPoof, { frameWidth: 100, frameHeight: 100 });
+    this.load.spritesheet('bugDeath', bugDeath, { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('explosion', explosion, { frameWidth: 72, frameHeight: 80 });
+    this.load.spritesheet('devPowerUp', devPowerUp, { frameWidth: 96, frameHeight: 96 });
+    this.load.spritesheet('powerUpCollect', powerUpCollect, { frameWidth: 96, frameHeight: 180 });
   }
   create() {
-    // animations
-
-    // enemy specific animations
+    // it monster specific animations
     this.anims.create({
-      key: 'death',
-      frames: this.anims.generateFrameNumbers('monsterDeath', { start: 0, end: 5 }),
+      key: 'poof',
+      frames: this.anims.generateFrameNumbers('itMonsterPoof', { start: 0, end: 8 }),
       frameRate: 30,
       repeat: 0,
+      hideOnComplete: true
     });
+    this.anims.create({
+      key: 'walk',
+      frames: this.anims.generateFrameNumbers('itMonster', { start: 0, end: 5 }),
+      frameRate: 20,
+      repeat: -1,
+    });
+    // bug specific animations
     this.anims.create({
       key: 'bounce',
       frames: this.anims.generateFrameNumbers('itBug', { start: 0, end: 6 }),
@@ -151,35 +163,56 @@ export default class PreloaderScene extends Phaser.Scene {
       repeat: -1,
     });
     this.anims.create({
-      key: 'walk',
-      frames: this.anims.generateFrameNumbers('itMonster', { start: 0, end: 7 }),
-      frameRate: 20,
-      repeat: -1,
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('bugDeath', { start: 0, end: 4}),
+      frameRate: 30,
+      repeat: 0,
+      hideOnComplete: true
     });
     // player specific animations
     this.anims.create({
-      key: 'up',
-      frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+      key: 'playerUp',
+      frames: this.anims.generateFrameNumbers('player', { start: 7, end: 9 }),
       repeat: -1,
-      frameRate: 10
+      frameRate: 10,
     });
     this.anims.create({
-      key: 'down',
+      key: 'playerDown',
       frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
       repeat: -1,
-      frameRate: 10
+      frameRate: 10,
     });
     this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+      key: 'playerLeft',
+      frames: this.anims.generateFrameNumbers('player', { start: 3, end: 4 }),
       repeat: -1,
-      frameRate: 10
+      frameRate: 10,
     });
     this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+      key: 'playerRight',
+      frames: this.anims.generateFrameNumbers('player', { start: 5, end: 6 }),
       repeat: -1,
-      frameRate: 10
+      frameRate: 10,
+    });
+    this.anims.create({
+      key: 'explode',
+      frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 2}),
+      repeat: 0,
+      frameRate: 30,
+      hideOnComplete: true
+    });
+    this.anims.create({
+      key: 'powerUpFloat',
+      frames: this.anims.generateFrameNumbers('devPowerUp', { start: 0, end: 15}),
+      repeat: -1,
+      frameRate: 15,
+    })
+    this.anims.create({
+      key: 'powerUpCollect',
+      frames: this.anims.generateFrameNumbers('powerUpCollect', { start: 0, end: 4 }),
+      repeat: 0,
+      frameRate: 10,
+      hideOnComplete: true
     });
     // highscore scene specific animations
     this.anims.create({
@@ -188,21 +221,21 @@ export default class PreloaderScene extends Phaser.Scene {
       frameRate: 8,
       repeat: -1,
       delay: 5000,
-      repeatDelay: 6000
+      repeatDelay: 6000,
     });
     this.anims.create({
       key: 'closeMouth',
       frames: this.anims.generateFrameNumbers('highscoreBG', { start: 2, end: 7 }),
       frameRate: 30,
       delay: 200,
-      repeat: 0
+      repeat: 0,
     });
     // gameover scene specific animations
     this.anims.create({
       key: 'dizzy',
       frames: this.anims.generateFrameNumbers('dizzyAnim', { start: 0, end: 13 }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     });
   }
   ready() {
