@@ -21,6 +21,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.score = 0;
     this.startRound = false;
+
+    // Track games played
+    gtag('event', 'start game');
   }
   create() {
     this.map = this.add.sprite(this.width / 2, this.height / 2, 'map').setScale(1.2);
