@@ -240,6 +240,7 @@ export default class HighScoreScene extends Phaser.Scene {
           });
         }
         if (res.status === 403) {
+          this.resetScene();
           this.scene.start('ProfanityError', { score: this.score });
         }
       })
