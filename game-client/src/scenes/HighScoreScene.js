@@ -15,7 +15,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.chars = [
       [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ],
       [ 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' ],
-      [ 'U', 'V', 'W', 'X', 'Y', 'Z', '.', '-', 'DEL', 'SUB']
+      [ 'U', 'V', 'W', 'X', 'Y', 'Z', '.', ' ', 'DEL', 'SUB']
     ];
     this.score = data.score;
     this.text;
