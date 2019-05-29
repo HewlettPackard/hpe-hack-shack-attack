@@ -135,6 +135,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.nameCursor = this.add.graphics()
     .fillStyle(0xFFFFFF, 1)
     .fillRect(this.nameText.x - 3, this.nameText.y + 40, 35, 5);
+    this.nameCursor.visible = false;
     this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
     this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2 - 110, 'highscoreEyes').setScale(9);
   }
@@ -256,6 +257,8 @@ export default class HighScoreScene extends Phaser.Scene {
     
     if (initialLength > 0 && nameLength === 0 && initialLength !== 0) {
       this.initials = this.initials.substr(0, initialLength - 1);
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
       this.events.emit('updateInitials', this.initials);
       this.initialsCursor.x -= 35;
     } else if (initialLength > 0 && nameLength > 0) {
@@ -279,6 +282,8 @@ export default class HighScoreScene extends Phaser.Scene {
     if (x === 9 && y === 2 && initialLength > 0 && nameLength > 0) {
       this.events.emit('submitUserData', this.initials, this.name, this.score);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength === 0 && initialLength !== 0) {
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
       this.initialsCursor.x -= 35;
       this.initials = this.initials.substr(0, initialLength - 1);
       this.events.emit('updateInitials', this.initials);
@@ -287,12 +292,16 @@ export default class HighScoreScene extends Phaser.Scene {
       this.name = this.name.substr(0, nameLength - 1);
       this.events.emit('updateName', this.name);
     } else if (initialLength < this.initLimit) {
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
       if (this.chars[y][x] !== 'DEL' && this.chars[y][x] !== 'SUB') {
         this.initials = this.initials.concat(this.chars[y][x]);
         this.initialsCursor.x += 35;
         this.events.emit('updateInitials', this.initials);
       }
     } else if (initialLength === this.initLimit && nameLength < this.nameLimit) {
+      this.nameCursor.visible = true;
+      this.initialsCursor.visible = false;
       if (this.chars[y][x] !== 'DEL' && this.chars[y][x] !== 'SUB') {
         this.name = this.name.concat(this.chars[y][x]);
         this.nameCursor.x += 35;
