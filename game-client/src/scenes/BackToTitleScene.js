@@ -74,14 +74,14 @@ export default class BackToTitleScene extends Phaser.Scene {
   createScene() {
     this.submitSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 3 - 32, this.height / 2 + 35, 320, 80)
+      .fillRoundedRect(this.width / 2 - 280, this.height / 2 + 35, 200, 80)
     this.cancelSelectionBox = this.add.graphics()
       .fillStyle(0xFFFFFF, 1)
-      .fillRoundedRect(this.width / 2 - 23, this.height / 2 + 35, 320, 80)
-    this.cancelSelectionBox.visible = false;
+      .fillRoundedRect(this.width / 2, this.height / 2 + 35, 200, 80)
+    this.submitSelectionBox.visible = false;
 
-    this.submitButton = this.add.bitmapText(this.width / 3 , this.height / 2 + 50, 'arcadeFont', 'Submit', 45).setTint(0x000000).setInteractive()
-    this.cancelButton = this.add.bitmapText(this.width / 2 , this.height / 2 + 50, 'arcadeFont', 'Cancel', 45).setTint(0xFFFFFF).setInteractive()
+    this.submitButton = this.add.bitmapText(this.width / 2 - 250, this.height / 2 + 50, 'arcadeFont', 'Yes', 45).setTint(0xFFFFFF).setInteractive()
+    this.cancelButton = this.add.bitmapText(this.width / 2 + 50, this.height / 2 + 50, 'arcadeFont', 'No', 45).setTint(0x000000).setInteractive()
 
     this.message1 = this.add.bitmapText(this.width / 2 - 520, this.height / 2 - 180, 'arcadeFont', 'Cancel submitting', 60);
     this.message2 = this.add.bitmapText(this.width / 2 - 360, this.height / 2 - 100, 'arcadeFont', 'your score?', 60);

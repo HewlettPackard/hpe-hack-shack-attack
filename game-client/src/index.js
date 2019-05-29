@@ -9,6 +9,7 @@ import HighScoreScene from './scenes/HighScoreScene';
 import ErrorScene from './scenes/ErrorScene';
 import BackToTitleScene from './scenes/BackToTitleScene';
 import ThankYouScene from './scenes/ThankYouScene';
+import ProfanityErrorScene from './scenes/ProfanityErrorScene';
 
 class Game extends Phaser.Game {
   constructor() {
@@ -21,6 +22,7 @@ class Game extends Phaser.Game {
     this.scene.add('HighScore', HighScoreScene);
     this.scene.add('BackToTitle', BackToTitleScene);
     this.scene.add('Error', ErrorScene);
+    this.scene.add('ProfanityError', ProfanityErrorScene);
     this.scene.add('ThankYou', ThankYouScene);
     this.scene.start('Boot');
   }
