@@ -43,22 +43,14 @@ export default class Leaderboard extends Component {
     this.state = {
       column1: [],
       column2: [],
-      date: {
-        day: '',
-      },
+      currentDay: '',
     };
   }
 
   componentDidMount() {
     this.interval = setInterval(() => {
       const newDate = new Date();
-      this.setState(
-        {
-          date: {
-            day: newDate.getDate().toString(),
-          },
-        },
-      );
+      this.setState({ currentDay: newDate.getDate().toString() });
     }, 1000);
 
     this._isMounted = true;
@@ -87,7 +79,7 @@ export default class Leaderboard extends Component {
 
   render() {
     const { column1, column2 } = this.state;
-    const { date: { day } } = this.state;
+    const { currentDay } = this.state;
     const tableBody1 = column1.map((player, index) => (
       <Box width="large" basis="1/2" direction="row" gap="small" key={index}>
         <Text size="xxlarge" weight="bold">
@@ -134,7 +126,7 @@ export default class Leaderboard extends Component {
             >
 
               {PostData.map((postDetail) => {
-                if (postDetail.day === day) {
+                if (postDetail.day === currentDay) {
                   return <Box alignSelf="start" direction="row" gap="small">
                     <Text weight="bold" size="large"> {postDetail.time} </Text>
                     <Text size="large"> {postDetail.title} </Text>
