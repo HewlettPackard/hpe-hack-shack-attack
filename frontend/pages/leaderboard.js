@@ -48,7 +48,6 @@ export default class Leaderboard extends Component {
       column2: [],
       date: {
         day: '',
-        time: '',
       },
     };
   }
@@ -60,7 +59,6 @@ export default class Leaderboard extends Component {
         {
           date: {
             day: newDate.getDate().toString(),
-            time: newDate.getHours().toString(),
           },
         },
       );
