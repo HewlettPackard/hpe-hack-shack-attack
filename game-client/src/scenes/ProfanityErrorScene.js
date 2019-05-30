@@ -1,15 +1,16 @@
 /* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 
-export default class ErrorScene extends Phaser.Scene {
+export default class ProfanityErrorScene extends Phaser.Scene {
   constructor() {
-    super('Error');
+    super('ProfanityError');
   }
   init(data) {
     this.gamepad;
     this.buttonPressed = false;
     this.stickPressed = false;
     this.startScene = false;
+
     this.height = this.game.config.height;
     this.width = this.game.config.width;
 
@@ -59,9 +60,9 @@ export default class ErrorScene extends Phaser.Scene {
     }
   }
   createScene() {
-    this.message1 = this.add.bitmapText(this.width / 2 - 680, this.height / 2 - 180, 'arcadeFont', 'There was an error when', 60);
-    this.message2 = this.add.bitmapText(this.width / 2 - 620, this.height / 2 - 100, 'arcadeFont', 'submitting your score', 60);
-    this.message4 = this.add.bitmapText(this.width / 2 + 620, this.height / 2 - 75, 'arcadeFont', '.', 60);
+    this.message1 = this.add.bitmapText(this.width / 2 - 720, this.height / 2 - 180, 'arcadeFont', 'Profanity is not allowed', 60);
+    this.message2 = this.add.bitmapText(this.width / 2 - 780, this.height / 2 - 100, 'arcadeFont', 'in either initials or name', 60);
+    this.message4 = this.add.bitmapText(this.width - 200, this.height / 2 - 75, 'arcadeFont', '.', 60);
     this.acceptText = this.add.bitmapText(this.width / 2 - 490, this.height / 2 + 80, 'arcadeFont', 'Press A or Enter to continue', 35)
       .setTint(0xFFFFFF)
 
@@ -84,8 +85,7 @@ export default class ErrorScene extends Phaser.Scene {
     this.startScene = false;
     this.background.play('closeMouth');
     this.background.on('animationcomplete', () => {
-      this.scene.start('Title');
+      this.scene.start('HighScore', { score: this.score });
     });
   }
 }
-

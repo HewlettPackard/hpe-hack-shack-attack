@@ -1,7 +1,9 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable no-underscore-dangle */
+
 import React, { Component } from 'react';
 import {
   Box, Heading, Text, Grommet,

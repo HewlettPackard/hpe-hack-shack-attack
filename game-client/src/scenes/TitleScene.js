@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 
 export default class TitleScene extends Phaser.Scene {
@@ -109,6 +110,7 @@ export default class TitleScene extends Phaser.Scene {
   onSelect() {
     if (this.selection === 'start') {
       this.startScene = false;
+      gtag('event', 'start game'); // Track games played
       this.scene.start('Game');
     } else {
       // start attract
