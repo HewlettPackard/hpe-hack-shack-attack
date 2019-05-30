@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 
 export default class PowerUp extends Phaser.Physics.Arcade.Sprite {

@@ -1,4 +1,6 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 /* eslint-disable no-underscore-dangle */
+
 import React, { Component } from 'react';
 import { TableLayout } from '../components/Leaderboard/style';
 import { Config } from '../config';

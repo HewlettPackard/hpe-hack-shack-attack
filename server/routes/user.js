@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import express from 'express';
 import User from '../models/user.js';
 import profanityList from '../profanity/profanityList.js';

@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import Phaser from "phaser";
 import { config } from './config/config';
 import BootScene from './scenes/BootScene';
