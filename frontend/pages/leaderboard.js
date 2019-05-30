@@ -56,7 +56,6 @@ export default class Leaderboard extends Component {
         {
           date: {
             day: newDate.getDate().toString(),
-
           },
         },
       );
