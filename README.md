@@ -48,10 +48,10 @@ A - Confirm selection/If no option for selections, exit current screen
 
 In Game:
 Joystick for movement
-A - Fire down
-B - Fire right
-X - Fire left
-Y - Fire up
+A(Hold) - Fire down
+B(Hold) - Fire right
+X(Hold) - Fire left
+Y(Hold) - Fire up
 
 In Highscore Input:
 Joystick to select characters
@@ -66,10 +66,10 @@ Enter - Confirm selection/If no option for selections, exit current screen
 
 In Game:
 WSAD for movement
-Down arrow - Fire down
-Right arrow - Fire right
-Left arrow - Fire left
-Up arrow - Fire up
+Down arrow(Hold) - Fire down
+Right arrow(Hold) - Fire right
+Left arrow(Hold) - Fire left
+Up arrow(Hold) - Fire up
 
 In Highscore Input:
 Arrow keys to select characters
