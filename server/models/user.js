@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import mongoose from 'mongoose';
 const userSchema = mongoose.Schema({
   name: {type: String, required: true},

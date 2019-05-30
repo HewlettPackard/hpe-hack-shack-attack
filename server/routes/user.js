@@ -7,7 +7,9 @@ import Filter from 'bad-words';
 const router = express.Router();
 const filter = new Filter();
 
-filter.addWords(...profanityList);
+// add profanity not caught by bad-words in profanityList.js
+// filter.addWords(...profanityList);
+
 // Get users record
 router.get('/user/leaderboard', (req, res) => {
   User.find()
