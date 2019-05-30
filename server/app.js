@@ -1,3 +1,5 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
+
 // Third Party Modules
 import express from 'express';
 import cors from 'cors';

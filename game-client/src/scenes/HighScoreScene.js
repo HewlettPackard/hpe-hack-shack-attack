@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 import { API_URL } from '../config/config';
 
@@ -15,11 +16,13 @@ export default class HighScoreScene extends Phaser.Scene {
     this.chars = [
       [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ],
       [ 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' ],
-      [ 'U', 'V', 'W', 'X', 'Y', 'Z', '.', '-', 'DEL', 'SUB']
+      [ 'U', 'V', 'W', 'X', 'Y', 'Z', '.', ' ', 'DEL', 'SUB']
     ];
     this.score = data.score;
     this.text;
     this.block;
+    this.initialsCursor;
+    this.nameCursor;
     this.cursor = new Phaser.Math.Vector2();
 
     this.height = this.game.config.height;
@@ -119,18 +122,43 @@ export default class HighScoreScene extends Phaser.Scene {
     .fillStyle(0xFFFFFF, 1)
     .fillRect(this.text.x / 2 - 80, this.text.y / 2 + 125, 85, 12);
 
+    
     this.add.bitmapText(100, 670, 'arcadeFont', 'INITIALS', 40).setTint(0xFF1FDC83);
     this.add.bitmapText(100, 770, 'arcadeFont', 'NAME', 40).setTint(0xFF1FDC83);
     
     this.initialText = this.add.bitmapText(100, 720, 'arcadeFont', '', 35).setTint(0xFFFFFF);
     this.nameText = this.add.bitmapText(100, 820, 'arcadeFont', '', 35).setTint(0xFFFFFF);
 
+    this.initialsCursor = this.add.graphics()
+    .fillStyle(0xFFFFFF, 1)
+    .fillRect(this.initialText.x - 3, this.initialText.y + 40, 35, 5);
+
+    this.nameCursor = this.add.graphics()
+    .fillStyle(0xFFFFFF, 1)
+    .fillRect(this.nameText.x - 3, this.nameText.y + 40, 35, 5);
+    this.nameCursor.visible = false;
     this.background = this.add.sprite(this.width / 2 + 5, this.height / 2, 'highscoreBG').setScale(11.5);
     this.eyes = this.add.sprite(this.width / 2 + 4, this.height / 2 - 110, 'highscoreEyes').setScale(9);
   }
   createAnimations() {
     this.tweens.add({
       targets: this.block,
+      alpha: 0.2,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      duration: 350
+    });
+    this.tweens.add({
+      targets: this.initialsCursor,
+      alpha: 0.2,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      duration: 350
+    });
+    this.tweens.add({
+      targets: this.nameCursor,
       alpha: 0.2,
       yoyo: true,
       repeat: -1,
@@ -212,6 +240,13 @@ export default class HighScoreScene extends Phaser.Scene {
             this.scene.start('ThankYou');
           });
         }
+        if (res.status === 403) {
+          this.resetScene();
+          this.background.play('closeMouth');
+          this.background.on('animationcomplete', (animation, frame) =>{
+            this.scene.start('ProfanityError', { score: this.score });
+          });
+        }
       })
       .catch(err => {
         this.resetScene();
@@ -227,10 +262,14 @@ export default class HighScoreScene extends Phaser.Scene {
     
     if (initialLength > 0 && nameLength === 0 && initialLength !== 0) {
       this.initials = this.initials.substr(0, initialLength - 1);
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
       this.events.emit('updateInitials', this.initials);
+      this.initialsCursor.x -= 35;
     } else if (initialLength > 0 && nameLength > 0) {
       this.name = this.name.substr(0, nameLength - 1);
       this.events.emit('updateName', this.name);
+      this.nameCursor.x -= 35;
     } else if (initialLength === 0) {
       this.resetScene();
       this.background.play('closeMouth');
@@ -248,19 +287,29 @@ export default class HighScoreScene extends Phaser.Scene {
     if (x === 9 && y === 2 && initialLength > 0 && nameLength > 0) {
       this.events.emit('submitUserData', this.initials, this.name, this.score);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength === 0 && initialLength !== 0) {
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
+      this.initialsCursor.x -= 35;
       this.initials = this.initials.substr(0, initialLength - 1);
       this.events.emit('updateInitials', this.initials);
     } else if (x === 8 && y === 2 && initialLength > 0 && nameLength > 0) {
+      this.nameCursor.x -= 35;
       this.name = this.name.substr(0, nameLength - 1);
       this.events.emit('updateName', this.name);
     } else if (initialLength < this.initLimit) {
+      this.nameCursor.visible = false;
+      this.initialsCursor.visible = true;
       if (this.chars[y][x] !== 'DEL' && this.chars[y][x] !== 'SUB') {
         this.initials = this.initials.concat(this.chars[y][x]);
+        this.initialsCursor.x += 35;
         this.events.emit('updateInitials', this.initials);
       }
     } else if (initialLength === this.initLimit && nameLength < this.nameLimit) {
+      this.nameCursor.visible = true;
+      this.initialsCursor.visible = false;
       if (this.chars[y][x] !== 'DEL' && this.chars[y][x] !== 'SUB') {
         this.name = this.name.concat(this.chars[y][x]);
+        this.nameCursor.x += 35;
         this.events.emit('updateName', this.name);
       }
     }

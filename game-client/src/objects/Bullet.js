@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 
 export default class Bullet extends Phaser.Physics.Arcade.Sprite {
@@ -26,19 +27,19 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     switch (direction) {
       case 'up':
-        this.setPosition(x, y);
+        this.setPosition(x + 15, y);
         this.setVelocityY(-550);
         break;
       case 'down':
-        this.setPosition(x, y);
+        this.setPosition(x - 15, y);
         this.setVelocityY(550);
         break;
       case 'left':
-        this.setPosition(x, y);
+        this.setPosition(x, y + 12);
         this.setVelocityX(-550);
         break;
       case 'right':
-        this.setPosition(x, y);
+        this.setPosition(x, y + 12);
         this.setVelocityX(550);
         break;
     }
@@ -70,6 +71,9 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   onHit() {
+    this.explosion = this.scene.add.sprite(this.x, this.y, 'explosion')
+    .setScale(0.8)
+    .play('explode');
     this.disableBody();
     this.setActive(false);
     this.setVisible(false);

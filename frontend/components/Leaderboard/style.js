@@ -1,3 +1,5 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
+
 import styled from 'styled-components';
 
 export const TableLayout = styled.div`
