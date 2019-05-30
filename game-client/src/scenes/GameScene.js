@@ -1,3 +1,4 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
 import ItBug from '../objects/ItBug';
 import ItMonster from '../objects/ItMonster';

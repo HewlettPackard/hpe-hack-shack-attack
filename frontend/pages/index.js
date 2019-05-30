@@ -1,3 +1,5 @@
+/* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
+
 import React from 'react';
 import Link from 'next/link';
 
