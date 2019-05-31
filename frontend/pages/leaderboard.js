@@ -1,12 +1,13 @@
 /* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
-/* eslint-disable no-underscore-dangle */
 
 import React, { Component } from 'react';
 import {
   Box, Heading, Text, Grommet,
 } from 'grommet';
 import { Config } from '../config';
-import PostData from '../data/events.json';
+import day1 from '../data/day1.json';
+import day2 from '../data/day2.json';
+import day3 from '../data/day3.json';
 
 const theme = {
   global: {
@@ -43,16 +44,29 @@ export default class Leaderboard extends Component {
     this.state = {
       column1: [],
       column2: [],
-      currentDay: '',
+      events: {},
     };
   }
 
-  componentDidMount() {
-    this.interval = setInterval(() => {
-      const newDate = new Date();
-      this.setState({ currentDay: newDate.getDate().toString() });
-    }, 1000);
+  componentWillMount() {
+    const newDate = new Date();
+    const day = newDate.getDate().toString();
+    switch (day) {
+      case '18':
+        this.setState({ events: day1 });
+        break;
+      case '19':
+        this.setState({ events: day2 });
+        break;
+      case '20':
+        this.setState({ events: day3 });
+        break;
+      default:
+        this.setState({ events: [{ title: 'no events today' }] });
+    }
+  }
 
+  componentDidMount() {
     this._isMounted = true;
     fetch(`${Config.apiUrl}/user/leaderboard`)
       .then(res => res.json())
@@ -71,6 +85,7 @@ export default class Leaderboard extends Component {
       .catch(err => console.log(err));
   }
 
+
   componentWillUnmount() {
     clearInterval(this.interval);
     this._isMounted = false;
@@ -79,7 +94,7 @@ export default class Leaderboard extends Component {
 
   render() {
     const { column1, column2 } = this.state;
-    const { currentDay } = this.state;
+    const { events } = this.state;
     const tableBody1 = column1.map((player, index) => (
       <Box width="large" basis="1/2" direction="row" gap="small" key={index}>
         <Text size="xxlarge" weight="bold">
@@ -125,14 +140,10 @@ export default class Leaderboard extends Component {
               alignSelf="center"
             >
 
-              {PostData.map((postDetail) => {
-                if (postDetail.day === currentDay) {
-                  return <Box alignSelf="start" direction="row" gap="small">
-                    <Text weight="bold" size="large"> {postDetail.time} </Text>
-                    <Text size="large"> {postDetail.title} </Text>
-                  </Box>;
-                }
-              })}
+              {events.map(postDetail => <Box alignSelf="start" direction="row" gap="small">
+                <Text weight="bold" size="large"> {postDetail.time} </Text>
+                <Text size="large"> {postDetail.title} </Text>
+              </Box>)}
             </Box>
           </Box>
           <Box basis="1/2" background="accent-3">

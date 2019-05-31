@@ -1,0 +1,26 @@
+[
+    
+    {
+        "day": "20", 
+        "time": "1:00 - 1:40pm",
+        "title": "Hack Shack Workshop – Use HPE SimpliVity REST API fundamentals to build a simple automation script in HPE SimpliVity."
+  
+    },
+      {
+        "day": "20", 
+        "time": "12:00- 12:40pm",
+        "title": "Hack Shack Workshop – Improve day 2 operations with your own custom automation with the HPE Nimble Storage REST API."
+  
+      },
+      {
+        "day": "20", 
+        "time": "4:30 - 5:10pm",
+        "title": "HPE Design Workshop – User experience research tools and techniques that drive customer experience."
+      },
+      {
+        "day": "20", 
+        "time": "10:00 - 10:40am",
+        "title": "Hack Shack Workshop — Simplify edge/IoT management with intent-driven computing."
+      }
+  
+  ]

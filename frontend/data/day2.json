@@ -1,0 +1,31 @@
+[
+    {
+      "day": "19", 
+      "time": "9:00 - 9:40am",
+      "title": "Hack Shack Workshop – Using RedFish API, monitor and manage HPE ProLiant servers from core to edge."
+    },
+  
+    {
+      "day": "19",  
+      "time": "2:00 - 2:40pm",
+      "title": "Hack Shack Workshop – Learn about HPE’s most popular open source library, Grommet, a class-leading React based UI/UX framework."
+  
+    },
+    {
+        "day": "19", 
+        "time": "12:00 - 12:40pm",
+        "title": "HPE Design Workshop – Tools that help your customers and partners build amazing experiences.  "
+  
+    },
+      {
+        "day": "19", 
+        "time": "10:00- 10:40am",
+        "title": "HPE Design Workshop – Design Sprint, Go! Rapid Prototyping & The Customer Feedback Loop."
+  
+      },
+      {
+        "day": "19", 
+        "time": "1:00 - 1:40pm",
+        "title": "Hack Shack Workshop – Use HPE SimpliVity REST API fundamentals to build a simple automation script in HPE SimpliVity."
+      }
+    ]
