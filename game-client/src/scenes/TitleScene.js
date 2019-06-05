@@ -113,8 +113,8 @@ export default class TitleScene extends Phaser.Scene {
       gtag('event', 'start game'); // Track games played
       this.scene.start('Game');
     } else {
-      // start attract
-     //  this.scene.start('Attract');
+      this.startScene = false;
+      this.scene.start('AttractMode');
     }
   }
   centerObject(gameObject, offsetX = 0, offsetY = 0) {
