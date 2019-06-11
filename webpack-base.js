@@ -22,12 +22,12 @@ module.exports = {
       {
         test: /\.(gif|png|jpe?g|svg|xml|mp4)$/i,
         use: "file-loader"
-      },
+      }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(["dist"], {
-      root: path.resolve(__dirname, "../")
+      root: path.resolve(__dirname, "./")
     }),
     new webpack.DefinePlugin({
       CANVAS_RENDERER: JSON.stringify(true),
