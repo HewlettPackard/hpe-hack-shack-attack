@@ -29,7 +29,7 @@ class Game extends Phaser.Game {
     this.scene.add('ThankYou', ThankYouScene);
     this.scene.start('Boot');
   }
-}
+} 
 
 window.onload = function () {
   window.game = new Game();
