@@ -2,40 +2,16 @@
 Hackshack game for Discover 2019 event.
 
 ## Getting Started
-Install dependencies individually for frontend, game-client, and server folders.
+Install dependencies.
 
 ```
-cd frontend
-yarn
-```
-```
-cd game-client
-yarn
-```
-```
-cd server
-yarn
+yarn install
 ```
 
 ## To run
-frontend
-```
-cd frontend
-yarn start
-```
-game-client
-```
-cd game-client
-yarn start
-```
-server must have MongoDB running prior.
-```
-mongod
-```
 
 ```
-cd server
-yarn-watch
+yarn start
 ```
 
 ## How to play
