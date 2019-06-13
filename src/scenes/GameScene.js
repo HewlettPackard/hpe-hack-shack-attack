@@ -185,13 +185,13 @@ export default class GameScene extends Phaser.Scene {
         this.itBugs.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 225);
+        this.player, 200);
 
       Phaser.Utils.Array.Each(
         this.itMonsters.getChildren(),
         this.physics.moveToObject,
         this.physics,
-        this.player, 150);
+        this.player, 125);
         
     } else {
       this.spawnTimerBug = time;
