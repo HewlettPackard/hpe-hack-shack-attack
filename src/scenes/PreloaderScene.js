@@ -25,6 +25,7 @@ import bugDeath from '../assets/sprites/bugDeath.png';
 import explosion from '../assets/sprites/explosion.png';
 import highscoreEyes from '../assets/sprites/highscoreeyes.png';
 import powerUpCollect from '../assets/sprites/powerUpCollect.png';
+import winners from '../assets/sprites/winners.png';
 
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
@@ -113,6 +114,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('playerAvatar', playerAvatar);
     this.load.image('bullet', bullet);
     this.load.image('devGameOver', devGameOver);
+    this.load.image('winners', winners);
+
     this.load.spritesheet('player', player, { frameWidth: 80, frameHeight: 112 });
     this.load.spritesheet('itBug', itBug, { frameWidth: 96, frameHeight: 124 });
     this.load.spritesheet('itMonster', itMonster, { frameWidth: 100, frameHeight: 116 });
@@ -226,7 +229,7 @@ export default class PreloaderScene extends Phaser.Scene {
   ready() {
     this.readyCount++;
     if(this.readyCount === 2) {
-      this.scene.start('Title');
+      this.scene.start('Splash');
     }
   }
 }

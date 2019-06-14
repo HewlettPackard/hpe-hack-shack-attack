@@ -1,11 +1,9 @@
 /* (C) Copyright 2019 Hewlett Packard Enterprise Development LP. */
 import 'phaser';
-import demoVideo from '../assets/media/demoVideo.mp4';
-import video_t from '../objects/Video';
 
-export default class AttractModeScene extends Phaser.Scene {
+export default class SplashScene extends Phaser.Scene {
   constructor() {
-    super('AttractMode');
+    super('Splash');
   }
   init() {
     this.startScene = false;
@@ -17,15 +15,14 @@ export default class AttractModeScene extends Phaser.Scene {
   create() {
     this.countdown();
     this.keyboardInputs();
-    this.demo = new video_t(this, 'demoVideo', this.width - 540, this.height / 2 + 245, 'demoVideo', demoVideo, this.width, this.height, true);
-    this.demo.setScale(1.45);
+    this.winnersSplash = this.add.sprite(this.width / 2, this.height / 2, 'winners')
     this.cameras.main.fadeIn(2000);
     this.time.addEvent({
-      delay: 25000,
+      delay: 7000,
       callback: () => {
         this.cameras.main.fade(2000);
         this.cameras.main.on('camerafadeoutcomplete', () => {
-          this.scene.start('Splash')
+          this.scene.start('AttractMode')
         });
       }
     });
@@ -38,9 +35,6 @@ export default class AttractModeScene extends Phaser.Scene {
       if (this.gamepad) {
         this.gamepadInputs();
       }
-    }
-    if (this.demo) {
-      this.demo.update();
     }
   }
   countdown() {
