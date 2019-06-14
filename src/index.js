@@ -12,6 +12,7 @@ import ErrorScene from './scenes/ErrorScene';
 import BackToTitleScene from './scenes/BackToTitleScene';
 import ThankYouScene from './scenes/ThankYouScene';
 import ProfanityErrorScene from './scenes/ProfanityErrorScene';
+import SplashScene from './scenes/SplashScene';
 
 class Game extends Phaser.Game {
   constructor() {
@@ -27,6 +28,7 @@ class Game extends Phaser.Game {
     this.scene.add('Error', ErrorScene);
     this.scene.add('ProfanityError', ProfanityErrorScene);
     this.scene.add('ThankYou', ThankYouScene);
+    this.scene.add('Splash', SplashScene);
     this.scene.start('Boot');
   }
 } 
