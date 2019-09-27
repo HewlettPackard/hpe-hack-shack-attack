@@ -69,9 +69,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.play('playerDown', true);
     } else if (gamepad.B) {
       this.play('playerRight', true);
-    } else if (gamepad.buttons[3].pressed) {
+    } else if (gamepad.X) {
       this.play('playerLeft', true);
-    } else if (gamepad.buttons[4].pressed) {
+    } else if (gamepad.Y) {
       this.play('playerUp', true);
     } else {
       if (Math.abs(x) > Math.abs(y)) {

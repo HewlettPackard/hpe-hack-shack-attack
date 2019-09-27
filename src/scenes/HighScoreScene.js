@@ -12,7 +12,8 @@ export default class HighScoreScene extends Phaser.Scene {
     this.buttonPressed = false;
     this.stickPressed = false;
     this.startScene = false;
-
+    this.loading = false;
+    
     this.chars = [
       [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ],
       [ 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' ],
@@ -69,35 +70,37 @@ export default class HighScoreScene extends Phaser.Scene {
     }
   }
   gamepadInputs() {
-    // A button
-    if (this.gamepad.A && this.buttonPressed === false) {
-      this.buttonPressed = true;
-      this.enter();
-    }
-    if (this.gamepad.B && this.buttonPressed === false) {
-      this.buttonPressed = true;
-      this.backspace();
-    }
-    if (!this.gamepad.A && !this.gamepad.B) {
-      this.buttonPressed = false;
-    }
-    // joystick
-    if (this.gamepad.leftStick.y === -1 && this.stickPressed === false){
-      this.stickPressed = true;
-      this.moveUp();
-    } else if (this.gamepad.leftStick.y === 1 && this.stickPressed === false) {
-      this.stickPressed = true;
-      this.moveDown();
-    }
-    if (this.gamepad.leftStick.x === -1 && this.stickPressed === false){
-      this.stickPressed = true;
-      this.moveLeft();
-    } else if (this.gamepad.leftStick.x === 1 && this.stickPressed === false) {
-      this.stickPressed = true;
-      this.moveRight();
-    }
-    if (this.gamepad.leftStick.y === 0 && this.gamepad.leftStick.x === 0) {
-      this.stickPressed = false;
+    if (this.loading === false) {
+      // A button
+      if (this.gamepad.A && this.buttonPressed === false) {
+        this.buttonPressed = true;
+        this.enter();
+      }
+      if (this.gamepad.B && this.buttonPressed === false) {
+        this.buttonPressed = true;
+        this.backspace();
+      }
+      if (!this.gamepad.A && !this.gamepad.B) {
+        this.buttonPressed = false;
+      }
+      // joystick
+      if (this.gamepad.leftStick.y === -1 && this.stickPressed === false){
+        this.stickPressed = true;
+        this.moveUp();
+      } else if (this.gamepad.leftStick.y === 1 && this.stickPressed === false) {
+        this.stickPressed = true;
+        this.moveDown();
+      }
+      if (this.gamepad.leftStick.x === -1 && this.stickPressed === false){
+        this.stickPressed = true;
+        this.moveLeft();
+      } else if (this.gamepad.leftStick.x === 1 && this.stickPressed === false) {
+        this.stickPressed = true;
+        this.moveRight();
+      }
+      if (this.gamepad.leftStick.y === 0 && this.gamepad.leftStick.x === 0) {
+        this.stickPressed = false;
+      }
     }
   }
   resetScene() {
@@ -105,6 +108,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.initials = '';
     this.name = '';
     this.startScene = false;
+    this.loading = false;
     this.events.removeListener('updateInitials');
     this.events.removeListener('updateName');
     this.events.removeListener('submitUserData');
@@ -224,6 +228,7 @@ export default class HighScoreScene extends Phaser.Scene {
     this.nameText.setText(name);
   }
   submitUserData (initials, name, score) {
+    this.loading = true;
     const data = { initials, name, score };
       return fetch(API_URL, {
         method: 'POST',
