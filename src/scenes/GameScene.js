@@ -221,7 +221,7 @@ export default class GameScene extends Phaser.Scene {
   }
   fireBulletsGamepad(time, gamepad) {
     if (time > this.bulletTimer) {
-      if (gamepad.A || gamepad.B || gamepad.buttons[2].pressed || gamepad.buttons[3].pressed || gamepad.buttons[4].pressed) {
+      if (gamepad.A || gamepad.B || gamepad.X || gamepad.Y) {
         let bullet = this.bullets.getFirstDead(false);
         if (!bullet) {
           bullet = new Bullet(this, 0, 0);
