@@ -46,7 +46,8 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
   }
 
   onFireGamepad(x, y, gamepad) {
-    if (gamepad.id.indexOf('Xbox Wireless Controller') > -1) {
+    if (gamepad.id.indexOf('Xbox Wireless Controller') > -1 ||
+       gamepad.id.indexOf('Wireless Controller') > -1) {
       if (gamepad.buttons[3].pressed) {
         return this.fireBullet(x, y, 'up')
       } else if (gamepad.A) {
